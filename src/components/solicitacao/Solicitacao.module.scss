@@ -38,6 +38,17 @@ textarea {
   width: 100%;
 }
 
+textarea {
+  padding: 10px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"]  {
+  padding: 0 10px;
+}
+
+
 //Estilizção do grupo1
 .formGrupo1 {
   width: 35%;
@@ -140,6 +151,7 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    cursor: pointer;
   }
   .deletar {
     width: 30%;
@@ -147,6 +159,8 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #ffffff;
+    cursor: pointer;
   }
 }
 
@@ -166,6 +180,10 @@ th {
   font-size: 1rem;
 }
 
+th {
+  min-width: 30px;
+}
+
 th,
 td {
   border: solid;
@@ -174,9 +192,13 @@ td {
 
 .btnLixeira {
   border: none;
+  transition: .5s;
+  margin-top: 3px;
   :hover {
-    background-color: #a60b2f;
+    color: #000000;
     border-radius: 6px;
+    fill: #a60b2f;
+    cursor: pointer;
   }
 }
 
@@ -223,6 +245,7 @@ td {
       align-items: center;
       justify-content: space-evenly;
       color: white;
+      cursor: pointer;
     }
 
     .buttonCancelar {
@@ -233,6 +256,7 @@ td {
       align-items: center;
       justify-content: space-evenly;
       color: white;
+      cursor: pointer;
     }
   }
 }
