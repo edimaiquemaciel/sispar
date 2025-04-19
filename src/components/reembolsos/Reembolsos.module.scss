@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -16,7 +21,7 @@ header {
 }
 
 .mainReembolsos {
-  width: 95vw;
+  width: 80vw;
   height: 95vh;
   display: flex;
   flex-direction: column;

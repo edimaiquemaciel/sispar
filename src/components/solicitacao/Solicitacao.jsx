@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { Trash2, Save, Delete, SquareCheckBig, X } from "lucide-react";
+import { Trash2, Save, Delete, SquareCheckBig, X, StickyNote } from "lucide-react";
 
 import NavBar from "../navbar/NavBar.jsx";
 import styles from "./Solicitacao.module.scss";
 import Home from "../../assets/Dashboard/home header.png";
 import Seta from "../../assets/Dashboard/Vector.png";
-import Motivo from "../../assets/Solicitacao/motivo.png";
 
 import { useForm } from "react-hook-form";
 
-import Api from "../../Services/Api.jsx"; //importando a conexão
+import Api from "../../Services/Api.jsx";
+
+import "../../global.scss"
 
 function Solicitacao() {
   
@@ -60,9 +61,12 @@ function Solicitacao() {
     reset();
   };
 
+ 
 
+  
   return (
     <div className={styles.layoutSolicitacao}>
+      <div className="overlay"></div>
       <NavBar />
 
       <div className={styles.containerPrincipalSolicitacao}>
@@ -179,7 +183,7 @@ function Solicitacao() {
                   <input
                     name="ordemInterna"
                     id="ordemInterna"
-                    type="text"
+                    type="number"
                     {...register("ordemInterna")}
                   />
                 </div>
@@ -199,7 +203,7 @@ function Solicitacao() {
                   <input
                     name="pep"
                     id="PEP"
-                    type="text"
+                    type="number"
                     {...register("pep")}
                   />
                 </div>
@@ -223,7 +227,7 @@ function Solicitacao() {
                   <input
                     name="distanciaKm"
                     id="distance-input"
-                    type="text"
+                    type="number"
                     {...register("distanciaKm")}
                   />
                 </div>
@@ -232,7 +236,7 @@ function Solicitacao() {
                   <label htmlFor="valor">Valor / Km</label>
                   <input
                     name="valorKm"
-                    type="text"
+                    type="number"
                     {...register("valorKm")}
                   />
                 </div>
@@ -240,7 +244,7 @@ function Solicitacao() {
                 <div className={styles.valorFaturado}>
                   <label htmlFor="faturado"> Val. Faturado </label>
                   <input
-                    type="text"
+                    type="number"
                     name="valorFaturado"
                     {...register("valorFaturado")}
                   />
@@ -249,7 +253,7 @@ function Solicitacao() {
                 <div className={styles.despesa}>
                   <label htmlFor="taxa"> Despesa </label>
                   <input
-                    type="text"
+                    type="number"
                     id="despesa"
                     name="despesa"
                     {...register("despesa")}
@@ -275,65 +279,67 @@ function Solicitacao() {
               </div>
             </div>
           </form>
-          <table>
-            <thead>
-              <tr>
-                <th>Excluir</th>
-                <th>Colaborador(a)</th>
-                <th>Empresa</th>
-                <th>Nº Prest.</th>
-                <th>Data</th>
-                <th>Motivo</th>
-                <th>Tipo de despesa</th>
-                <th>Ctr. Custo</th>
-                <th>Ord. Int.</th>
-                <th>Div.</th>
-                <th>PEP</th>
-                <th>Moeda</th>
-                <th>Dist. Km</th>
-                <th>Val. Km</th>
-                <th>Val. Faturado</th>
-                <th>Despesa</th>
-              </tr>
-            </thead>
+          {dadosReembolso.length > 0 ? (
+            <div className={styles.container_tabela}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Excluir</th>
+                    <th>Colaborador(a)</th>
+                    <th>Empresa</th>
+                    <th>Nº Prest.</th>
+                    <th>Data</th>
+                    <th>Motivo</th>
+                    <th>Tipo de despesa</th>
+                    <th>Ctr. Custo</th>
+                    <th>Ord. Int.</th>
+                    <th>Div.</th>
+                    <th>PEP</th>
+                    <th>Moeda</th>
+                    <th>Dist. Km</th>
+                    <th>Val. Km</th>
+                    <th>Val. Faturado</th>
+                    <th>Despesa</th>
+                  </tr>
+                </thead>
 
-            <tbody>
-              {dadosReembolso.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <button
-                      onClick={() => handleDelete(index)}
-                      className={styles.btnLixeira}
-                    >
-                      <Trash2 />
-                    </button>
-                  </td>
-                  <td>{item.colaborador}</td>
-                  <td>{item.empresa}</td>
-                  <td>{item.nPrestacao}</td>
-                  <td>{item.data}</td>
+                <tbody>
+                  {dadosReembolso.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <button
+                          onClick={() => handleDelete(index)}
+                          className={styles.btnLixeira}
+                        >
+                          <Trash2 size="20px" />
+                        </button>
+                      </td>
+                      <td>{item.colaborador}</td>
+                      <td>{item.empresa}</td>
+                      <td>{item.nPrestacao}</td>
+                      <td>{item.data}</td>
 
-                  <td>
-                    <button>
-                      <img src={Motivo} alt="Motivo" />
-                    </button>
-                  </td>
+                      <td>
+                          {item.descricao ? <StickyNote style={{marginTop: "2px"}}  size="22px" /> : "Sem Motivo"}
+                      </td>
 
-                  {/* <td>{item.descricao}</td> */}
-                  <td>{item.tipoReembolso}</td>
-                  <td>{item.centroCusto}</td>
-                  <td>{item.ordemInterna}</td>
-                  <td>{item.divisao}</td>
-                  <td>{item.pep}</td>
-                  <td>{item.moeda}</td>
-                  <td>{item.distanciaKm}</td>
-                  <td>{item.valorKm}</td>
-                  <td>{item.valorFaturado}</td>
-                  <td>{item.despesa}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      {/* <td>{item.descricao}</td> */}
+                      <td>{item.tipoReembolso}</td>
+                      <td>{item.centroCusto}</td>
+                      <td>{item.ordemInterna}</td>
+                      <td>{item.divisao}</td>
+                      <td>{item.pep}</td>
+                      <td>{item.moeda}</td>
+                      <td>{item.distanciaKm}</td>
+                      <td>{item.valorKm}</td>
+                      <td>{item.valorFaturado}</td>
+                      <td>{item.despesa}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : ""}
         </main>
 
         <footer className={styles.footerSolicitacao}>

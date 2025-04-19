@@ -19,7 +19,7 @@ function Rembolsos() {
   return (
     <div className={styles.body}>
 
-<NavBar />
+      <NavBar />
 
       <header>
         <img src={Home} alt="Casinha da header" />
