@@ -1,20 +1,22 @@
 import {useNavigate} from "react-router-dom"
-//import Capa from "../../assets/Tela Login/imagem tela de login.png";
 import Logo from "../../assets/Tela Login/logo-ws.png";
 import styles from "./Login.module.scss"
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useState } from "react";
 
 function Login() {
+  const [visible, setVisible] = useState(false);
 
-const navigate = useNavigate() //Iniciando o hook useNavigate
+  const navigate = useNavigate() 
 
-const irParaReembolsos = () => {
-  navigate("/reembolsos")  //Redirecionando para a página de reembolsos
-}
+  const irParaReembolsos = () => {
+    navigate("/reembolsos") 
+  }
 
   return (
     <main className={styles.mainLogin}>
       <section className={styles.containerFoto}>
-        {/* <img src={Capa} alt="Foto de um navio cargueiro" /> */}
       </section>
 
       <section className={styles.formWapper}>
@@ -24,17 +26,22 @@ const irParaReembolsos = () => {
           <p>Sistema de Emissão de Boletos e Parcelamento</p>
         </div>
 
-        <form action="">
+        <form>
           <input type="email" name="email" id="email" placeholder="Email" />
 
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Senha"
-          />
+          <div className={styles.input_wrapper}>
+            <input
+              type={visible ? 'text' : 'password'}
+              name="password"
+              id="password"
+              placeholder="Senha"
+            />
+            <div className={styles.input_icon}>
+              {visible ? (<VisibilityIcon className={styles.iconEye} onClick={()=> setVisible(!visible)} />) : (<VisibilityOffIcon className={styles.iconEye} onClick={()=> setVisible(!visible)} />)}
+            </div>
+          </div>
 
-          <p>Esqueci minha senha</p>
+          <p><a href="#">Esqueceu a senha?</a></p>
 
           <div className={styles.boxButton}>
             <button onClick={irParaReembolsos}>Entrar</button>

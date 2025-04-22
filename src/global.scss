@@ -9,18 +9,17 @@
     }
 }
 
+
 .active {
     left: 0;
-    width: 250px;
+    width: 200px;
     transition: all .8s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     p {
       opacity: 1;
     }
 }
 
-.overlay {
-    background-color: #7E8293;
-}
 
 #esconder {
     left: -68px;

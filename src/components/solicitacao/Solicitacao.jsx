@@ -3,8 +3,17 @@ import { Trash2, Save, Delete, SquareCheckBig, X, StickyNote } from "lucide-reac
 
 import NavBar from "../navbar/NavBar.jsx";
 import styles from "./Solicitacao.module.scss";
-import Home from "../../assets/Dashboard/home header.png";
-import Seta from "../../assets/Dashboard/Vector.png";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import toast from "react-hot-toast";
+
+import Overlay from "../modals/Overlay/Overlay.jsx";
+import LimparCamposModal from "../modals/LimparCamposModal/LimparCamposModal.jsx";
+import ExcluirDadosModal from "../modals/ExcluirDadosModal/ExcluirDadosModal.jsx";
+import CancelarSolicitacaoModal from "../modals/CancelarSolicitacaoModal/CancelarSolicitacaoModal.jsx";
+
 
 import { useForm } from "react-hook-form";
 
@@ -13,17 +22,37 @@ import Api from "../../Services/Api.jsx";
 import "../../global.scss"
 
 function Solicitacao() {
-  
-  const [dadosReembolso, setDadosReembolso] = useState([]);
-  const {register, handleSubmit, reset} = useForm();
- 
-  const [enviado, setEnviado] = useState(false);
 
-  const onSubmit = (data) => {
-    setDadosReembolso([...dadosReembolso, data])
-    reset();
+  const [modaLimparCampos, setModalLimparCampos] = useState(false);
+  const [modalExcluirDados, setModalExluirDados] = useState(false);
+  const [modalCancelarSolicitacao, setModalCancelarSolicitacao] = useState(false);
+  const [getIndex, setGetIndex] = useState(null);
+  const [isClicked, setIsClicked] = useState(null);
+  const [dadosReembolso, setDadosReembolso] = useState([]);
+  const {register, handleSubmit, reset, formState: {dirtyFields}} = useForm();
+  const [enviado, setEnviado] = useState(false);
+  const campoVazio = Object.keys(dirtyFields).length > 0;
+
+  const handleFocus = (id) => {
+    setIsClicked(id);
+  }
+  const handleBlur = () => {
+    setIsClicked(null);
+  }
+  const handleSelected = (id) => {
+    setIsClicked((prev)=> (prev === id ? null : id))
   }
 
+  const onSubmit = (data) => {
+
+    if(campoVazio){
+      setDadosReembolso([...dadosReembolso, data])
+      reset();
+    }else {
+      toast.error("Por favor, preencha algum campo")
+    }
+  }
+ 
   useEffect(() => {
     if (enviado) {
       setDadosReembolso([]); 
@@ -61,20 +90,20 @@ function Solicitacao() {
     reset();
   };
 
- 
-
   
   return (
     <div className={styles.layoutSolicitacao}>
-      <div className="overlay"></div>
+      <Overlay show={modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao} />
+      <LimparCamposModal show={modaLimparCampos} reset={reset} setModalLimparCampos={setModalLimparCampos} />
+      <ExcluirDadosModal show={modalExcluirDados} handleDelete={handleDelete} getIndex={getIndex} setModalExluirDados={setModalExluirDados} />
+      <CancelarSolicitacaoModal show={modalCancelarSolicitacao} cancelarSolicitacao={cancelarSolicitacao} setModalCancelarSolicitacao={setModalCancelarSolicitacao} />
       <NavBar />
-
       <div className={styles.containerPrincipalSolicitacao}>
         <header className={styles.headerSolicitacao}>
-          <img src={Home} alt="Vetor da casinha" />
-          <img src={Seta} alt="Vetor da setinha" />
+          <HomeOutlinedIcon sx={{color: "#282c2c"}} />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
           <p> Reembolsos</p>
-          <img src={Seta} alt="Vetor da setinha" />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
           <p>Solicitação de Reembolsos</p>
         </header>
 
@@ -129,51 +158,72 @@ function Solicitacao() {
               <div className={styles.formGrupo2G1}>
                 <div className={styles.inputData}>
                   <label htmlFor="date"> Data</label>
-                  <input
-                    type="date"
-                    name="data"
-                    {...register("data")}
-                  />
+                  <div className={styles.input_wrapper}>
+                    <input
+                      type="date"
+                      name="data"
+                      {...register("data")}
+                    />
+                    <div className={styles.input_icon}> 
+                      <DateRangeIcon />
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.selectDespesas}>
                   <label htmlFor="tipoReembolso"> Tipo de Despesa </label>
 
-                  <select
-                    name="tipoReembolso"
-                    id="tipoReembolso"
-                    {...register("tipoReembolso")}
-                  >
-                    <option value="">Selecionar</option>
-                    <option value="alimentacao">Alimentação</option>
-                    <option value="combustivel">Combustível</option>
-                    <option value="conducao">Condução</option>
-                    <option value="estacionamento">Estacionamento</option>
-                    <option value="viagem adm">Viagem admin.</option>
-                    <option value="viagem oper"> Viagem operacional</option>
-                    <option value="eventos">Eventos de representação</option>
-                  </select>
+                  <div className={styles.select_wrapper}>
+                    <select
+                      name="tipoReembolso"
+                      id="tipoReembolso"
+                      {...register("tipoReembolso")}
+                      onFocus={() => handleFocus("tipoReembolso")}
+                      onBlur={() => handleBlur()}
+                      onInput={()=> handleSelected("tipoReembolso")}
+                    >
+                      <option value="">Selecionar</option>
+                      <option value="alimentacao">Alimentação</option>
+                      <option value="combustivel">Combustível</option>
+                      <option value="conducao">Condução</option>
+                      <option value="estacionamento">Estacionamento</option>
+                      <option value="viagem adm">Viagem admin.</option>
+                      <option value="viagem oper"> Viagem operacional</option>
+                      <option value="eventos">Eventos de representação</option>
+                    </select>
+                    <div className={styles.select_icon}>
+                      <KeyboardArrowDownIcon className={isClicked === "tipoReembolso" ? styles.down : ''} />
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.centroDeCusto}>
                   <label htmlFor="custo">Centro de Custo</label>
-                  <select
-                    name="centroCusto"
-                    id="centroCusto"
-                    {...register("centroCusto")}
-                  >
-                    <option value="">Selecionar</option>
+                  <div className={styles.select_wrapper}>
+                    <select
+                      name="centroCusto"
+                      id="centroCusto"
+                      {...register("centroCusto")}
+                      onFocus={() => handleFocus("centroCusto")}
+                      onBlur={() => handleBlur()}
+                      onInput={()=> handleSelected("centroCusto")}
+                    >
+                      <option value="">Selecionar</option>
 
-                    <option value="FIN CONTROLES INTERNOS MTZ">
-                      1100109002 - FIN CONTROLES INTERNOS MTZ
-                    </option>
-                    <option value="FIN VICE-PRESIDENCIA FINANCAS MTZ">
-                      1100110002 - FIN VICE-PRESIDENCIA FINANCAS MTZ
-                    </option>
-                    <option value="FIN CONTABILIDADE MTZ">
-                      1100110101 - FIN CONTABILIDADE MTZ
-                    </option>
-                  </select>
+                      <option value="FIN CONTROLES INTERNOS MTZ">
+                        1100109002 - FIN CONTROLES INTERNOS MTZ
+                      </option>
+                      <option value="FIN VICE-PRESIDENCIA FINANCAS MTZ">
+                        1100110002 - FIN VICE-PRESIDENCIA FINANCAS MTZ
+                      </option>
+                      <option value="FIN CONTABILIDADE MTZ">
+                        1100110101 - FIN CONTABILIDADE MTZ
+                      </option>
+                    </select>
+                    <div className={styles.select_icon}>
+                      <KeyboardArrowDownIcon className={isClicked === "centroCusto" ? styles.down : ''} />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -210,16 +260,24 @@ function Solicitacao() {
 
                 <div className={styles.moeda}>
                   <label htmlFor="moeda">Moeda</label>
-                  <select
-                    name="moeda"
-                    id="coents"
-                    {...register("moeda")}
-                  >
-                    <option value=""></option>
-                    <option value="brl">BRL</option>
-                    <option value="ars">ARS</option>
-                    <option value="usd">USD</option>
-                  </select>
+                  <div className={styles.select_wrapper}>
+                    <select
+                      name="moeda"
+                      id="coents"
+                      {...register("moeda")}
+                      onFocus={() => handleFocus("moeda")}
+                      onBlur={() => handleBlur()}
+                      onInput={()=> handleSelected("moeda")}
+                    >
+                      <option value="">Selecionar</option>
+                      <option value="brl">BRL</option>
+                      <option value="ars">ARS</option>
+                      <option value="usd">USD</option>
+                    </select>
+                    <div className={styles.select_icon}>
+                      <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.distancia}>
@@ -268,13 +326,20 @@ function Solicitacao() {
                     <Save /> Salvar
                   </button>
 
-                  <button
+                  {campoVazio ? <button
                     className={styles.deletar}
                     type="button"
-                    onClick={() => reset()}
+                    onClick={() => setModalLimparCampos(true)}
                   >
                     <Delete />
-                  </button>
+                  </button> : <button
+                    className={styles.deletar}
+                    type="button"
+                    onClick={() => setModalLimparCampos(true)}
+                    disabled
+                  >
+                    <Delete />
+                  </button>}
                 </div>
               </div>
             </div>
@@ -302,13 +367,15 @@ function Solicitacao() {
                     <th>Despesa</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {dadosReembolso.map((item, index) => (
                     <tr key={index}>
                       <td>
                         <button
-                          onClick={() => handleDelete(index)}
+                          onClick={() => {
+                            setGetIndex(index)
+                            setModalExluirDados(true)
+                          }}
                           className={styles.btnLixeira}
                         >
                           <Trash2 size="20px" />
@@ -341,7 +408,6 @@ function Solicitacao() {
             </div>
           ) : ""}
         </main>
-
         <footer className={styles.footerSolicitacao}>
           <section>
             <div className={styles.inputFooter}>
@@ -377,12 +443,18 @@ function Solicitacao() {
                 <SquareCheckBig /> Enviar para Análise
               </button>
 
-              <button
+              {dadosReembolso.length > 0 ? (<button
                 className={styles.buttonCancelar}
-                onClick={() => cancelarSolicitacao()}
+                onClick={() => setModalCancelarSolicitacao(true)}
               >
                 <X /> Cancelar Solicitação
-              </button>
+              </button>) : (<button
+                className={styles.buttonCancelar}
+                onClick={() => setModalCancelarSolicitacao(true)}
+                disabled
+              >
+                <X /> Cancelar Solicitação
+              </button>)}
             </div>
           </section>
         </footer>
