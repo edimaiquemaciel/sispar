@@ -9,7 +9,7 @@ createRoot(document.getElementById('root')).render(
       toastOptions={{
         style: {
           minWidth: "350px",
-          maxWidth: "500px", // ⬅️ controla o tamanho padrão
+          maxWidth: "500px",
           fontSize: "1rem",
         },
       }}

@@ -9,6 +9,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import styles from "./NavBar.module.scss";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../authcontext/AuthContext";
+import { useContext } from "react";
 
 import "../../global.scss";
 
@@ -25,6 +27,8 @@ const routes = {
 function NavBar() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const {logout, user} = useContext(AuthContext);
+  
 
   const handleMenu = () => {
     setShow(!show);
@@ -39,8 +43,8 @@ function NavBar() {
         
         <div className={`${styles.accountDetailsNav} ${show ? styles.accountDetailsNav_active : ''}`}>
           <AccountCircleIcon className={styles.iconProfile} sx={{ fontSize: 45, color: "#0844C4" }} />
-          <p>Edimaique Maciel</p>
-          <p>Desenvolvedor FullStack jr</p>
+          <p>{user?.nome}</p>
+          <p>{user?.cargo}</p>
         </div>
         <div className={styles.containerNavbar}>
           <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
@@ -61,7 +65,10 @@ function NavBar() {
           </div>
         </div>
       </section>
-        <LogoutIcon onClick={()=> navigate(routes.login) } sx={{ color: "#FFFFFF", backgroundColor: "#63758d", padding: "2px 6px", transition: "all 0.5s ease-in-out" ,'&:hover': {backgroundColor: "#7A8DA7", cursor: "pointer"}, fontSize: 40, borderRadius: "5px", zIndex: "1000" }} />
+        <LogoutIcon onClick={()=> {
+          navigate(routes.login);
+          logout();
+        } } sx={{ color: "#FFFFFF", backgroundColor: "#63758d", padding: "2px 6px", transition: "all 0.5s ease-in-out" ,'&:hover': {backgroundColor: "#7A8DA7", cursor: "pointer"}, fontSize: 40, borderRadius: "5px", zIndex: "1000" }} />
     </nav>
   );
 }

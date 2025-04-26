@@ -4,15 +4,48 @@ import styles from "./Login.module.scss"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../authcontext/AuthContext";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "../../schemas/login";
+import {zodResolver} from "@hookform/resolvers/zod"
+import {ErrorMessage} from "@hookform/error-message" 
 
 function Login() {
+
+  const {login, user} = useContext(AuthContext);
+  const {register, handleSubmit, formState: {errors}} = useForm({
+    resolver: zodResolver(loginSchema)
+  });
+  const [error, setError] = useState('')
   const [visible, setVisible] = useState(false);
+  console.log(user);
+  
+  
+
+  const onSubmit = async (data) => {
+    try {
+      const sucesso = await login(data.email, data.password);
+      console.log(sucesso);
+      
+
+    if(sucesso) {
+      navigate("/reembolsos");
+    }else {
+      setError("Usuário ou senha inválidos")
+    }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      setError(error.message);
+      
+    }
+  }
 
   const navigate = useNavigate() 
 
-  const irParaReembolsos = () => {
-    navigate("/reembolsos") 
-  }
+  // const irParaReembolsos = () => {
+  //   navigate("/reembolsos") 
+  // }
 
   return (
     <main className={styles.mainLogin}>
@@ -26,25 +59,39 @@ function Login() {
           <p>Sistema de Emissão de Boletos e Parcelamento</p>
         </div>
 
-        <form>
-          <input type="email" name="email" id="email" placeholder="Email" />
-
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input 
+            type="email" 
+            id="email" 
+            placeholder="Email"
+            {...register("email")}
+            onInput={()=> setError('')}
+          />
+          <p style={{color: "red", margin: "0", padding: "0"}}>
+            <ErrorMessage errors={errors} name="email" />
+          </p>
           <div className={styles.input_wrapper}>
             <input
               type={visible ? 'text' : 'password'}
               name="password"
               id="password"
               placeholder="Senha"
+              {...register("password")}
+              onInput={()=> setError('')}
             />
             <div className={styles.input_icon}>
               {visible ? (<VisibilityIcon className={styles.iconEye} onClick={()=> setVisible(!visible)} />) : (<VisibilityOffIcon className={styles.iconEye} onClick={()=> setVisible(!visible)} />)}
             </div>
           </div>
+          <p style={{color: "red", margin: "0", padding: "0"}}>
+            <ErrorMessage errors={errors} name="password" />
+          </p>
+          {error && <p style={{color: "red", margin: "0", padding: "0"}}>{error}</p>}
 
           <p><a href="#">Esqueceu a senha?</a></p>
 
           <div className={styles.boxButton}>
-            <button onClick={irParaReembolsos}>Entrar</button>
+            <button type="submit" /*onClick={irParaReembolsos}*/ >Entrar</button>
             <button>Criar conta</button>
           </div>
 
