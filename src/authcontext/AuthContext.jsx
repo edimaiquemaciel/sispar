@@ -17,7 +17,7 @@ const AuthProvider = ({children}) => {
 
     const login = async (email, password) => {
         try {
-            const res = await fetch("http://localhost:5000/colaborador/login",{
+            const res = await fetch("https://api-sispar-production.up.railway.app/colaborador/login",{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
