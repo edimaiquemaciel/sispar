@@ -37,38 +37,56 @@ function NavBar() {
   return (
     <nav className={styles.navBarEstilo}>
       <div onClick={() => handleMenu()} className={`${styles.overlay} ${show ? styles.overlay_show : ''}`}></div>
-      <div className={`${styles.menu} ${show ? 'active' : ''}`}></div>
-        {show ? <MenuOpenIcon onClick={() => handleMenu()} className={styles.menuIcon} sx={{fontSize: 40}} /> : <MenuIcon onClick={() => handleMenu()} className={styles.menuIcon} sx={{fontSize: 40}} />}
-      <section>
+      <div className={`${styles.menu} ${show ? styles.active : ''}`}>
+        <section>
+          
+          <div className={`${styles.accountDetailsNav} ${show ? styles.accountDetailsNav_active : ''}`}>
+            <AccountCircleIcon className={styles.iconProfile} sx={{ fontSize: 45, color: "#0844C4" }} />
+            <p>{user?.nome}</p>
+            <p>{user?.cargo}</p>
+          </div>
+          <div className={styles.containerNavbar}>
+            <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+                <HomeIcon onClick={() => navigate(routes.home)} className={styles.icon} />
+                <p onClick={() => navigate(routes.home) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Home</p>
+            </div>
+            <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+                <RequestQuoteIcon onClick={() => navigate(routes.reembolso) } className={styles.icon} />
+                <p onClick={() => navigate(routes.reembolso) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Reembolso</p>
+            </div>
+            <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+                <ContentPasteSearchIcon onClick={() => navigate(routes.analise) } className={styles.icon} />
+                <p onClick={() => navigate(routes.analise) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Análise</p>
+            </div>
+            <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+                <HistoryIcon onClick={() => navigate(routes.historico) } className={styles.icon} />
+                <p onClick={() => navigate(routes.historico) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Histórico</p>
+            </div>
+          </div>
+        </section>
         
-        <div className={`${styles.accountDetailsNav} ${show ? styles.accountDetailsNav_active : ''}`}>
-          <AccountCircleIcon className={styles.iconProfile} sx={{ fontSize: 45, color: "#0844C4" }} />
-          <p>{user?.nome}</p>
-          <p>{user?.cargo}</p>
+      </div>
+      
+      {show ? <MenuOpenIcon onClick={() => handleMenu()} className={styles.menuIcon} sx={{fontSize: 40}} /> : <MenuIcon onClick={() => handleMenu()} className={styles.menuIcon} sx={{fontSize: 40}} />}
+      <div className={styles.containerNavbarTeste}>
+        <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+          <HomeIcon onClick={() => navigate(routes.home)} className={styles.icon} />
         </div>
-        <div className={styles.containerNavbar}>
-          <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
-              <HomeIcon onClick={() => navigate(routes.home)} className={styles.icon} />
-              <p onClick={() => navigate(routes.home) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Home</p>
-          </div>
-          <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
-              <RequestQuoteIcon onClick={() => navigate(routes.reembolso) } className={styles.icon} />
-              <p onClick={() => navigate(routes.reembolso) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Reembolso</p>
-          </div>
-          <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
-              <ContentPasteSearchIcon onClick={() => navigate(routes.analise) } className={styles.icon} />
-              <p onClick={() => navigate(routes.analise) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Análise</p>
-          </div>
-          <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
-              <HistoryIcon onClick={() => navigate(routes.historico) } className={styles.icon} />
-              <p onClick={() => navigate(routes.historico) } className={`${styles.menuText} ${show ? styles.showText : ''}`}>Histórico</p>
-          </div>
+        <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+          <RequestQuoteIcon onClick={() => navigate(routes.reembolso) } className={styles.icon} />
         </div>
-      </section>
-        <LogoutIcon onClick={()=> {
-          navigate(routes.login);
-          logout();
-        } } sx={{ color: "#FFFFFF", backgroundColor: "#63758d", padding: "2px 6px", transition: "all 0.5s ease-in-out" ,'&:hover': {backgroundColor: "#7A8DA7", cursor: "pointer"}, fontSize: 40, borderRadius: "5px", zIndex: "1000" }} />
+        <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+            <ContentPasteSearchIcon onClick={() => navigate(routes.analise) } className={styles.icon} />
+        </div>
+        <div className={`${styles.btnNav} ${show ? styles.btnNav_active : ''}`}>
+            <HistoryIcon onClick={() => navigate(routes.historico) } className={styles.icon} />
+        </div>
+      </div>
+    
+      <LogoutIcon onClick={()=> {
+        navigate(routes.login);
+        logout();
+      } } sx={{ color: "#FFFFFF", backgroundColor: "#63758d", padding: "2px 6px", transition: "all 0.5s ease-in-out" ,'&:hover': {backgroundColor: "#7A8DA7", cursor: "pointer"}, fontSize: 40, borderRadius: "5px", zIndex: "3000" }} />
     </nav>
   );
 }

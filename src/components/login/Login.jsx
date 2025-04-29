@@ -9,7 +9,7 @@ import { AuthContext } from "../../authcontext/AuthContext";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "../../schemas/login";
 import {zodResolver} from "@hookform/resolvers/zod"
-import {ErrorMessage} from "@hookform/error-message" 
+import {ErrorMessage} from "@hookform/error-message"
 
 function Login() {
 
@@ -91,8 +91,8 @@ function Login() {
           <p><a href="#">Esqueceu a senha?</a></p>
 
           <div className={styles.boxButton}>
-            <button type="submit" /*onClick={irParaReembolsos}*/ >Entrar</button>
-            <button>Criar conta</button>
+            <button type="submit" >Entrar</button>
+            <button type="button" onClick={()=> navigate("/cadastrar")}>Criar conta</button>
           </div>
 
         </form>

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import Api from "../Services/Api.jsx"
 
 const AuthContext = createContext();
 
@@ -17,40 +18,33 @@ const AuthProvider = ({children}) => {
 
     const login = async (email, password) => {
         try {
-            const res = await fetch("https://api-sispar-production.up.railway.app/colaborador/login",{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({"email": email, "senha": password})
-            })
-    
-            const data = await res.json();
-
-            if(!res.ok) {
-               throw new Error(data.mensagem || "Erro desconhecido ao fazer login") 
-            }
-            
-    
-            if(data.mensagem === 'Login realizado com sucesso') {
-                const fakeToken = "token-falso-123";
-                const user = {
-                    email: data.email,
-                    nome: data.nome,
-                    cargo: data.cargo,
-                }
-                setUser(user);
-                localStorage.setItem("user", JSON.stringify(user));
-                localStorage.setItem("token", fakeToken);
-                return true;
-            }else {
-                throw new Error(data.mensagem)
-            }
+          const res = await Api.post('/colaborador/login', {
+            email: email,
+            senha: password,
+          });
+      
+          const data = res.data;
+          
+      
+          if (res.status === 200 && data.mensagem === "Login realizado com sucesso") {
+            const fakeToken = 'token-falso-123';
+            const user = {
+              email: data.email,
+              nome: data.nome,
+              cargo: data.cargo,
+            };
+            setUser(user);
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', fakeToken);
+            return true;
+          } else {
+            throw new Error(data.mensagem);
+          }
         } catch (error) {
-            console.error("Erro no login", error.mensagem);
-            throw error;
+          console.error('Erro no login', error.response?.data?.mensagem || error.message);
+          throw new Error(error.response?.data?.mensagem || 'Erro desconhecido ao fazer login');
         }
-    }
+      }
     
 
     const logout = () => {

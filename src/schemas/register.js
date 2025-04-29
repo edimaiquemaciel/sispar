@@ -1,7 +1,7 @@
 import {z} from "zod"
 
 export const registerSchema = z.object({
-    nome: z.string().min(1, {message: "O campo nome precisa ser preenchido"}),
+    name: z.string().min(1, {message: "O campo nome precisa ser preenchido"}),
     email: z.string().min(1, {message: "O campo email precisa ser preenchido"}).email({message: "E-mail inválido"}),
     password: z.string().min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),
     password_confirmation: z.string().min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),

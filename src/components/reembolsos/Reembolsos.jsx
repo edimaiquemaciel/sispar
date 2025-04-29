@@ -12,13 +12,14 @@ import SolicitarHistorico from "../../assets/Dashboard/Solicitar - Histórico.pn
 import SolicitarReembolso from "../../assets/Dashboard/Solicitar - Reembolso.png";
 //importando a NavBar no Reembolsos
 import NavBar from "../navbar/NavBar.jsx"
+import NavBarTeste from "../navbar/NavBarTeste.jsx";
 
 function Rembolsos() {
   const navigate = useNavigate()
 
   return (
     <div className={styles.body}>
-      <NavBar />
+      {/* <NavBarTeste /> */}
 
       <div className={styles.container}>
         <header>

@@ -1,5 +1,6 @@
 .layoutSolicitacao {
   display: flex;
+  margin-left: 4rem;
 }
 
 .containerPrincipalSolicitacao {
@@ -24,6 +25,7 @@
     width: 100%;
     appearance: none;
     transition: box-shadow 0.4s ease-in-out, border-color 0.4s ease-in-out;
+    z-index: -1;
     &:focus {
       box-shadow: 
       0 0 0 2px #027af2,       /* Borda interna azul claro */
@@ -45,6 +47,7 @@
   input[type="number"],
   input[type="date"]  {
     padding: 0 10px;
+    z-index: 1;
   
   }
 }
@@ -118,7 +121,7 @@
   width: 99%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .formGrupo2G2 {
@@ -174,8 +177,7 @@
   width: 16%;
   display: flex;
   justify-content: space-between;
-  padding-top: 0.5rem;
-  height: 6vh;
+  height: 4vh;
 
   .salvar {
     background-color: #001a3d;
@@ -216,7 +218,7 @@
 
 
 table {
-  width: 100%;
+  width: 99.5%;
   border: 2px solid #ccc;
   border-collapse: collapse;
   margin-top: 30px;
@@ -234,40 +236,9 @@ th {
 }
 
 tr {
-
   &:hover {
     background-color: #efeff0;
   };
-
-  -webkit-animation-name: slideInDown;
-  animation-name: slideInDown;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  }
-  @-webkit-keyframes slideInDown {
-  0% {
-  -webkit-transform: translateY(-100%);
-  transform: translateY(-100%);
-  visibility: visible;
-  }
-  100% {
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-  }
-  }
-  @keyframes slideInDown {
-  0% {
-  -webkit-transform: translateY(-100%);
-  transform: translateY(-100%);
-  visibility: visible;
-  }
-  100% {
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-  }
-
 }
 
 td {
@@ -482,5 +453,11 @@ td {
 .modal_show {
   visibility: visible;
   opacity: 1;
+}
+
+.hover_none {
+  &:hover {
+    background-color: white;
+  }
 }
 

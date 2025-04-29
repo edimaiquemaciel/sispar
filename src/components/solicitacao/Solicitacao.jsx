@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Trash2, Save, Delete, SquareCheckBig, X, StickyNote } from "lucide-react";
 
-import NavBar from "../navbar/NavBar.jsx";
 import styles from "./Solicitacao.module.scss";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
@@ -9,7 +8,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import toast from "react-hot-toast";
 
-import Overlay from "../modals/Overlay/Overlay.jsx";
 import LimparCamposModal from "../modals/LimparCamposModal/LimparCamposModal.jsx";
 import ExcluirDadosModal from "../modals/ExcluirDadosModal/ExcluirDadosModal.jsx";
 import CancelarSolicitacaoModal from "../modals/CancelarSolicitacaoModal/CancelarSolicitacaoModal.jsx";
@@ -20,6 +18,7 @@ import { useForm } from "react-hook-form";
 import Api from "../../Services/Api.jsx";
 
 import "../../global.scss"
+import OverlayDom from "../modals/Overlay/OverlayDom.jsx";
 
 function Solicitacao() {
 
@@ -93,11 +92,15 @@ function Solicitacao() {
   
   return (
     <div className={styles.layoutSolicitacao}>
-      <Overlay show={modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao} />
+      {modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao ? (
+        <OverlayDom opacity={1} visibility={"visible"} zindex={1500} />
+      ) : (
+        <OverlayDom opacity={0} visibility={"hidden"} zindex={1500} />
+      )}
       <LimparCamposModal show={modaLimparCampos} reset={reset} setModalLimparCampos={setModalLimparCampos} />
       <ExcluirDadosModal show={modalExcluirDados} handleDelete={handleDelete} getIndex={getIndex} setModalExluirDados={setModalExluirDados} />
       <CancelarSolicitacaoModal show={modalCancelarSolicitacao} cancelarSolicitacao={cancelarSolicitacao} setModalCancelarSolicitacao={setModalCancelarSolicitacao} />
-      <NavBar />
+      {/* <NavBar /> */}
       <div className={styles.containerPrincipalSolicitacao}>
         <header className={styles.headerSolicitacao}>
           <HomeOutlinedIcon sx={{color: "#282c2c"}} />
@@ -406,7 +409,17 @@ function Solicitacao() {
                 </tbody>
               </table>
             </div>
-          ) : ""}
+          ) : (
+            <table>
+              <tbody>
+              <tr>
+                <td className={styles.hover_none}  style={{ textAlign: 'center', padding: '2rem' }}>
+                  Nenhum registro encontrado.
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          )}
         </main>
         <footer className={styles.footerSolicitacao}>
           <section>
