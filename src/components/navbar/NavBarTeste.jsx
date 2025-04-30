@@ -169,6 +169,7 @@ export default function NavBarTeste() {
         <List>
           {/* Item Home */}
           <ListItem 
+            onClick={() => navigate(routes.home)}
             button = "true" 
             sx={{ 
                 height: '48px', 
@@ -194,7 +195,6 @@ export default function NavBarTeste() {
                 zIndex: "1000",
               }}>
                 <HomeIcon 
-                  onClick={() => navigate(routes.home)}
                   sx={{ 
                       color: 'white', 
                       zIndex: "1000", 
@@ -215,14 +215,15 @@ export default function NavBarTeste() {
                 transform: open ? 'translateX(0)' : 'translateX(-60px)',
                 transition: 'transform 0.8s ease-in-out, width 0.8s ease-in-out, opacity 0.8s ease-in-out',
               }}>
-                <Typography 
-                    variant='inherit' 
-                    sx={{ 
-                        color: 'inherit',
-                        whiteSpace: 'nowrap',
-                        transition: "color 0.3s ease-in-out",
-                        fontWeight: "500"
-                }}>
+                <Typography
+                  variant='inherit' 
+                  sx={{ 
+                      color: 'inherit',
+                      whiteSpace: 'nowrap',
+                      transition: "color 0.3s ease-in-out",
+                      fontWeight: "500"
+                  }}
+                >
                  Home
                 </Typography>
               </Box>
@@ -231,6 +232,7 @@ export default function NavBarTeste() {
           
           {/* Item Reembolso */}
           <ListItem 
+            onClick={() => navigate(routes.reembolso)}
             button = "true"
             sx={{ 
                 height: '48px', 
@@ -255,7 +257,7 @@ export default function NavBarTeste() {
                 justifyContent: 'flex-start' 
               }}>
                 <RequestQuoteIcon 
-                  onClick={() => navigate(routes.reembolso)}
+                  
                   sx={{ 
                       color: 'white', 
                       zIndex: "1000", 
@@ -292,6 +294,7 @@ export default function NavBarTeste() {
           
           {/* Item Análise */}
           <ListItem 
+            onClick={() => navigate(routes.analise)}
             button = "true" 
             sx={{ 
                 height: '48px', 
@@ -316,7 +319,6 @@ export default function NavBarTeste() {
                 justifyContent: 'flex-start' 
               }}>
                 <ContentPasteSearchIcon 
-                  onClick={() => navigate(routes.analise)}
                   sx={{ 
                       color: 'white', 
                       zIndex: "1000", 
@@ -353,6 +355,7 @@ export default function NavBarTeste() {
           
           {/* Item Histórico */}
           <ListItem 
+            onClick={() => navigate(routes.historico)}
             button = "true" 
             sx={{ 
                 height: '48px', 
@@ -377,7 +380,6 @@ export default function NavBarTeste() {
                 justifyContent: 'flex-start' 
               }}>
                 <HistoryIcon 
-                  onClick={() => navigate(routes.historico)}
                   sx={{ 
                       color: 'white', 
                       zIndex: "1000", 

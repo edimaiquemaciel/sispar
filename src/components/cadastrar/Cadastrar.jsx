@@ -1,17 +1,16 @@
 import styles from "./Cadastrar.module.scss"
 import Logo from "../../assets/Tela Login/logo-ws.png";
 import { useForm, Controller  } from "react-hook-form";
+import { Link } from "react-router-dom";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {ErrorMessage} from "@hookform/error-message"
 import { registerSchema } from "../../schemas/register";
 import { useHookFormMask } from "use-mask-input";
-import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { Password } from 'primereact/password';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import "primeicons/primeicons.css"
 import "primeflex/primeflex.css"
-import { Link } from "react-router-dom";
 
 
 function Cadastrar() {
@@ -189,7 +188,7 @@ function Cadastrar() {
             </p>
           </div>
           <div className={styles.password_requirements}>
-            <h3>Requisitos de Senha</h3>
+            <h3>Requisitos de Senha:</h3>
             <ul>
               <li>Mínimo de 8 caracteres</li>
               <li>Pelo menos um caractere maiúsculo</li>
