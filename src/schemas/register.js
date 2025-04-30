@@ -3,8 +3,8 @@ import {z} from "zod"
 export const registerSchema = z.object({
     name: z.string().min(1, {message: "O campo nome precisa ser preenchido"}),
     email: z.string().min(1, {message: "O campo email precisa ser preenchido"}).email({message: "E-mail inválido"}),
-    password: z.string().min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),
-    password_confirmation: z.string().min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),
+    password: z.string().min(1, {message: "O campo senha é obrigatório"}).min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),
+    password_confirmation: z.string().min(1 ,{message: "O campo senha é obrigatório"}).min(8, {message: "A senha deve ter no mínimo 8 caracteres"}),
     phone: z.string().min(1, {message: "O campo telefone precisa ser preenchido"}).regex(/^\(\d{2}\) \d{5}-\d{4}$/, {message: "Telefone inválido"}),
     cep: z.string().min(1, {message: "O campo CEP precisa ser preenchido"}).regex(/^[0-9]{5}(-[0-9]{3})?$/,{message: "CEP inválido"}),
     address: z.string().min(1, {message: "O campo Endereço precisa ser preenchido"}),

@@ -4,37 +4,71 @@
     align-items: center;
     padding: 3.125rem 0;
     margin: 0 auto;
-    background-color: #1DACFB;
+    // background: linear-gradient(135deg, #001A3D 0%, #0844C4 50%, #00BEDD 100%);
+    // background-image: url("../../assets/Tela Login/imagem\ tela\ de\ login.png");
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // background-position: center center;
+    // background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 50%, #ccebff 100%);
+    // background: linear-gradient(135deg, #dae9f7 0%, #c2d9f0 50%, #acd0ea 100%);
+    // background: linear-gradient(to bottom right, #eef4ff, #e0e7ff);
+    // background: linear-gradient(to right, #001A3D, #0844C4, #00BEDD);
+    background: linear-gradient(to bottom, #00BEDD, #0844C4, #001A3D );
+
+
+
+
+
 }
 
 .contentCadastro {
     width: 100%;
     max-width: 32rem;
     border-radius: .5rem;
-    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #F5F5F7;
+    position: relative;
+
+    .form_title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-top: 20px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    form {
+        margin: 2rem 2rem 0 2rem;
+    }
 }
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     color: #333;
-  }
+}
 
 .inputWrapper {
     margin-bottom: .5rem;
+    svg {
+        top: 50%;
+        transform: translateY(-50%);
+    }
     input{
         width: 100%;
-        padding: 10px 11.5px;
-        border: 1px solid #ddd;
+        padding: 10px 11.5px 10px 11.5px;
         border-radius: 8px;
         font-size: .9rem;
     }
 }
+
 
 .ErrorMessage {
     color: red;
@@ -62,7 +96,21 @@ label {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    padding: 2rem;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    background: linear-gradient(135deg, #00205B 0%, #0040a0 70%, #1E90FF 100%);
+    color: #f0f7ff;
+
+    .subtitulo {
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .descricao {
+        font-size: 13px;
+        text-align: center;
+    }
 }
 
 .password_requirements {
@@ -101,10 +149,52 @@ label {
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        width: 60%;
+        width: 100%;
         transition: background-color 0.3s;
         &:hover {
             background-color: #030aa0;
         }
     }
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0 0;
+    color: #7f8c8d;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 2px solid #ddd;
+}
+
+.divider::before {
+    margin-right: 10px;
+}
+
+.divider::after {
+    margin-left: 10px;
+}
+
+.login_link {
+    text-align: center;
+    color: #4e5152;
+    margin-bottom: 30px;
+    a {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: 600;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.login_title {
+    position: absolute;
+    top: 16.5%;
+    right: 10px;
 }

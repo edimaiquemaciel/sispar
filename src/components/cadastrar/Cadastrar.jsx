@@ -1,13 +1,21 @@
 import styles from "./Cadastrar.module.scss"
 import Logo from "../../assets/Tela Login/logo-ws.png";
-import { useForm } from "react-hook-form";
+import { useForm, Controller  } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {ErrorMessage} from "@hookform/error-message"
 import { registerSchema } from "../../schemas/register";
 import { useHookFormMask } from "use-mask-input";
+import { InputMask } from "primereact/inputmask";
+import { InputText } from "primereact/inputtext";
+import { Password } from 'primereact/password';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import "primeicons/primeicons.css"
+import "primeflex/primeflex.css"
+import { Link } from "react-router-dom";
+
 
 function Cadastrar() {
-  const {register, handleSubmit, getValues, setValue, setError, formState: {errors}} = useForm({
+  const {register, handleSubmit, getValues, setValue, setError, clearErrors, control, formState: {errors}} = useForm({
     resolver: zodResolver(registerSchema),
   });
   const registerWithMask = useHookFormMask(register);
@@ -16,35 +24,44 @@ function Cadastrar() {
   }
 
   const buscaCep = async () => {
-    const cep = getValues("cep");
+    const cep = getValues("cep").replace(/[-_]/g, "");;
+    
     try {
-      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      if(cep.length === 8){
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await res.json();
+        const {logradouro, localidade} = data;
+        if(data.erro) {
+          setError("cep", {
+            type: "manual",
+            message: "CEP não encontrado. Verifique e tente novamente."
+          })
+          setValue("address", "");
+          setValue("city", "");
+        }
+        console.log(data);
+        if(!data.erro) {
+          setValue("address", logradouro);
+          setValue("city", localidade);
 
-      const data = await res.json();
-      const {logradouro, localidade} = data;
-      if(data.erro) {
+          clearErrors("address");
+          clearErrors("city");
+          clearErrors("cep");
+        }
+      }
+      if(cep.length < 8) {
         setError("cep", {
           type: "manual",
-          message: "CEP não encontrado. Verifique e tente novamente."
+          message: "CEP inválido! Por favor, verifique e insira todos os dígitos corretamente."
         })
         setValue("address", "");
         setValue("city", "");
       }
-      console.log(data);
-      if(!data.erro) {
-        setValue("address", logradouro);
-        setValue("city", localidade);
-        setError("address", {
-          type: "manual",
-          message: ""
-        });
-        setError("city", {
-          type: "manual",
-          message: ""
-        })
-        setError("cep", { message: "" });
+      
+      if(cep.length === 0){
+        clearErrors("cep");
+        
       }
-
     } catch (error) {
       console.error("erro do cep:", error);
     }
@@ -57,61 +74,116 @@ function Cadastrar() {
       <section className={styles.contentCadastro}>
         <div className={styles.cabecalhoCadastro}>
           <img src={Logo} alt="Logo da wilson sons" />
-          <h1>Cadastre-se no SISPAR</h1>
+          <h1>Bem-vindo ao SISPAR</h1>
+          <p className={styles.subtitulo}>Sistema de Emissão de Boletos e Parcelamento</p>
+          <p className={styles.descricao}>Complete seu cadastro para acessar todos os nossos serviços online.</p>
         </div>
+          <p className={styles.form_title}><i className="pi pi-user" style={{ fontSize: '1.5rem', color: "#1DACFB", marginBottom: "10px" }}></i>Dados Pessoais</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.inputWrapper}>
             <label>Nome Completo</label>
-            <input type="text" placeholder="Digite seu nome completo" id="name" {...register("name")} />
+            <InputText  type="text" placeholder="Digite seu nome completo" id="name" {...register("name")} />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="name" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label>E-mail</label>
-            <input type="text" placeholder="seu@email.com" id="email" {...register("email")} />
+            <InputText type="text" placeholder="seu@email.com" id="email" {...register("email")} />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="email" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label>Telefone</label>
-            <input type="text" id="phone" placeholder="(99) 99999-9999" {...registerWithMask("phone", "(99) 99999-9999")} />
+            <InputText id="phone" placeholder="(99) 99999-9999" {...registerWithMask("phone", "(99) 99999-9999")}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="phone" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label>CEP</label>
-            <input type="text" placeholder="99999-99" id="cep" {...registerWithMask("cep", "99999-999")} onBlur={()=> buscaCep()} />
+            <InputText placeholder="99999-99" id="cep" {...registerWithMask("cep", "99999-999")} onBlur={()=> buscaCep()} />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="cep" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label>Endereço</label>
-            <input type="text" id="address" readOnly {...register("address")}/>
+            <InputText type="text" id="address" readOnly {...register("address")}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="address" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label>Cidade</label>
-            <input type="text" id="city" readOnly  {...register("city")}/>
+            <InputText type="text" id="city" readOnly  {...register("city")}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="city" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label>Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha" {...register("password")}/>
+            <label htmlFor="password">Senha</label>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Password
+                  value={field.value ?? ''}
+                  onChange={(e) => field.onChange(e.target.value)}
+                  onBlur={field.onBlur}
+                  toggleMask
+                  style={{ display: "block" }}
+                  promptLabel="Digite sua senha" 
+                  weakLabel="Senha fraca" 
+                  mediumLabel="Senha média" 
+                  strongLabel="Senha forte"
+                  pt={{
+                    panel: {
+                      style: {
+                        backgroundColor: '#f9f9f9',
+                        borderRadius: '8px',
+                        padding: '12px',
+                      }
+                    },
+                  }}
+                />
+              )}
+            />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="password" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label>Confirmar Senha</label>
-            <input type="password" id="password_confirmation" placeholder="Confirme sua senha" {...register("password_confirmation")}/>
+            <label htmlFor="password_confirmation">Confirmar Senha</label>
+            <Controller
+              name="password_confirmation"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Password
+                  value={field.value ?? ''}
+                  onChange={(e) => field.onChange(e.target.value)}
+                  onBlur={field.onBlur}
+                  toggleMask
+                  style={{ display: "block" }}
+                  promptLabel="Digite sua senha" 
+                  weakLabel="Senha fraca" 
+                  mediumLabel="Senha média" 
+                  strongLabel="Senha forte"
+                  pt={{
+                    panel: {
+                      style: {
+                        backgroundColor: '#f9f9f9',
+                        borderRadius: '8px',
+                        padding: '12px',
+                      }
+                    },
+                  }}
+                />
+              )}
+            />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="password_confirmation" />
             </p>
@@ -129,16 +201,18 @@ function Cadastrar() {
           <div className={styles.inputWrapper_checkbox}>
             <input type="checkbox" id="terms" required {...register("terms")} />
             <label>Li e concordo com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a></label>
-            <p className={styles.ErrorMessage}>
-              <ErrorMessage errors={errors} name="terms" />
-            </p>
+            
           </div>
+          <p style={{textAlign: "center"}} className={styles.ErrorMessage}>
+            <ErrorMessage errors={errors} name="terms" />
+          </p>
           <div className={styles.btnCadastrar}>
             <button type="submit" >Criar conta</button>
           </div>
+          <div class={styles.divider}>ou</div>
         </form>
+        <p className={styles.login_link}>Já tem uma conta? <Link to={"/login"}>Faça login</Link></p>
       </section>
-      
     </main>
   )
 }
