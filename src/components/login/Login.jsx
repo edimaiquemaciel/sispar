@@ -13,15 +13,12 @@ import {ErrorMessage} from "@hookform/error-message"
 
 function Login() {
 
-  const {login, user} = useContext(AuthContext);
+  const {login} = useContext(AuthContext);
   const {register, handleSubmit, formState: {errors}} = useForm({
     resolver: zodResolver(loginSchema)
   });
   const [error, setError] = useState('')
   const [visible, setVisible] = useState(false);
-  console.log(user);
-  
-  
 
   const onSubmit = async (data) => {
     try {
@@ -31,11 +28,9 @@ function Login() {
 
     if(sucesso) {
       navigate("/reembolsos");
-    }else {
-      setError("Usuário ou senha inválidos")
     }
     } catch (error) {
-      console.error("Erro no login:", error);
+      console.log("Erro no login:", error);
       setError(error.message);
       
     }

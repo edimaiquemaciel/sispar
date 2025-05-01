@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import "./global.scss";
-import NavBarTeste from "./components/navbar/NavBarTeste";
+import NavBar from "./components/navbar/NavBar.jsx"
 function App() {
   return (
     <>
-      <NavBarTeste />
+      <NavBar />
       <Outlet />
     </>
   );

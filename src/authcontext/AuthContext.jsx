@@ -37,13 +37,33 @@ const AuthProvider = ({children}) => {
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', fakeToken);
             return true;
-          } else {
-            throw new Error(data.mensagem);
           }
         } catch (error) {
           console.error('Erro no login', error.response?.data?.mensagem || error.message);
           throw new Error(error.response?.data?.mensagem || 'Erro desconhecido ao fazer login');
         }
+      }
+
+      const singup = async (sanitizedData) => {
+
+        try {
+          const res = await Api.post("/colaborador/cadastrar", sanitizedData);
+          const data = res.data;
+          console.log(data);
+        
+          if (res.status === 400) {
+            throw new Error(data?.mensagem || "Erro ao cadastrar");
+          }
+
+          if(res.status === 201 && data.mensagem === "Dado cadastrado com sucesso"){
+            return data.mensagem;
+          }
+        
+        } catch (error) {
+          console.error('Erro no login', error.response?.data?.mensagem || error.message);
+          throw new Error(error.response?.data?.mensagem || 'Erro desconhecido');
+        }
+
       }
     
 
@@ -54,7 +74,7 @@ const AuthProvider = ({children}) => {
     }
 
     return (
-        <AuthContext.Provider value={{user, login, logout, loading}}>
+        <AuthContext.Provider value={{user, login, logout, singup, loading}}>
             {children}
         </AuthContext.Provider>
     )
