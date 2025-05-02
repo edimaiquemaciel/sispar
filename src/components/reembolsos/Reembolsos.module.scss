@@ -1,122 +1,142 @@
 .body {
   display: flex;
-  margin-left: 60px;
-}
+  margin-left: 67px;
+  padding-left: 5px;
+  padding-top: 10px;
+  background-color: #FFFFFF;
 
-.container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  //border: solid red;
-  height: 5vh;
-  width: 15vw;
-
-  p {
-    font-size: 1rem;
-  }
-}
-
-.mainReembolsos {
-  width: 100%;
-  height: 95vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-  }
-}
-
-.container_reembolso {
-  min-width: 750px;
-  max-width: 900px;
-}
-
-.containerCards {
-  // border: solid blue;
-  display: flex;
-  justify-content: space-between;
-}
-
-.card {
-  width: 15vw;
-  height: 20vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #cbd4e1;
-  border-radius: 6px;
-  margin-top: 1rem;
-  transition: all 0.3s ease-in-out;
-}
-
-.card:hover{
-  background-color: #f1f4f9;
-  box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.205);
-  cursor: pointer;
-}
-
-.containerDados {
-  border: solid #cbd4e1;
-  height: 10vh;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  border-radius: 6px;
-  margin-top: 1rem;
-  border: none;
-  box-shadow: 0px 0px 5px 0.5px rgba(0, 0, 0, 0.24);
-
-  div {
+  .container {
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 20%;
-    height: 5vh;
-    //border: solid ;
+    flex-direction: column;
+    width: 100%;
+
+    header {
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+
+      p {
+        margin-bottom: -4px;
+        font-size: 12px;
+        text-decoration: none;
+        color: #000000;
+      }
+    }
+
+    .mainReembolsos {
+      width: 100%;
+      height: 95vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .container_reembolso {
+        min-width: 750px;
+        max-width: 900px;
+
+        .containerCards {
+          display: flex;
+          justify-content: space-between;
+
+          .card {
+            width: 15vw;
+            height: 20vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #cbd4e1;
+            border-radius: 6px;
+            margin-top: 1rem;
+            transition: all 0.3s ease-in-out;
+          }
+          
+          .card:hover{
+            background-color: #f1f4f9;
+            box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.205);
+            cursor: pointer;
+          }
+        }
+
+        .containerDados {
+          border: solid #cbd4e1;
+          height: 10vh;
+          display: flex;
+          justify-content: space-evenly;
+          align-items: center;
+          border-radius: 6px;
+          margin-top: 1rem;
+          border: none;
+          box-shadow: 0px 0px 5px 0.5px rgba(0, 0, 0, 0.24);
+        
+          div {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 20%;
+            height: 5vh;
+          }
+
+          .imgSolicitados {
+            background-color: #00bedd;
+            padding: 6px;
+            border-radius: 6px;
+          }
+
+          .imgAnalise {
+            background-color: #e56700;
+            padding: 6px;
+            border-radius: 6px;
+          }
+          
+          .imgAprovados {
+            background-color: #007a6a;
+            padding: 6px;
+            border-radius: 6px;
+          }
+          
+          .imgRejeitados {
+            background-color: #a60b2f;
+            padding: 6px;
+            border-radius: 6px;
+          }
+          
+        }
+
+        .containerSistema {
+          width: 15vw;
+          height: 10vh;
+          display: flex;
+          justify-content: space-evenly;
+          margin-top: 1rem;
+          align-items: center;
+        }
+      }
+    }
+    
   }
 }
 
-.imgSolicitados {
-  background-color: #00bedd;
-  padding: 6px;
-  border-radius: 6px;
-}
 
-.imgAnalise {
-  background-color: #e56700;
-  padding: 6px;
-  border-radius: 6px;
-}
 
-.imgAprovados {
-  background-color: #007a6a;
-  padding: 6px;
-  border-radius: 6px;
-}
 
-.imgRejeitados {
-  background-color: #a60b2f;
-  padding: 6px;
-  border-radius: 6px;
-}
 
-.containerSistema {
-//  border: solid green;
-  width: 15vw;
-  height: 10vh;
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 1rem;
-  align-items: center;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+

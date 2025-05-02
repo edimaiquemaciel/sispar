@@ -11,6 +11,11 @@ import Solicitacao from './components/solicitacao/Solicitacao.jsx'
 import Reembolsos from "./components/reembolsos/Reembolsos.jsx"
 import { AuthProvider } from './authcontext/AuthContext.jsx'
 
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import 'primereact/resources/primereact.min.css';
+import "primeicons/primeicons.css"
+import "primeflex/primeflex.css"
+
 const router = createBrowserRouter([
   {
     path: "/",

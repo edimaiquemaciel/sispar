@@ -15,7 +15,7 @@ function OverlayDom({onClick, opacity, visibility, zindex}) {
         transition: 'opacity 0.8s ease-in-out, visibility 0.8s ease-in-out',
         opacity: opacity,
         visibility: visibility,
-        pointerEvents: open ? 'auto' : 'none', // para não capturar cliques quando invisível
+        pointerEvents: open ? 'auto' : 'none',
       }}
     />,
      document.body

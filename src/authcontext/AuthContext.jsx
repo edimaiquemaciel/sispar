@@ -44,7 +44,7 @@ const AuthProvider = ({children}) => {
         }
       }
 
-      const singup = async (sanitizedData) => {
+      const signup = async (sanitizedData) => {
 
         try {
           const res = await Api.post("/colaborador/cadastrar", sanitizedData);
@@ -74,7 +74,7 @@ const AuthProvider = ({children}) => {
     }
 
     return (
-        <AuthContext.Provider value={{user, login, logout, singup, loading}}>
+        <AuthContext.Provider value={{user, login, logout, signup, loading}}>
             {children}
         </AuthContext.Provider>
     )

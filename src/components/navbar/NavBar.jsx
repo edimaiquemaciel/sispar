@@ -105,7 +105,7 @@ export default function NavBar() {
             justifyContent: "center",
             border: "none",
             boxShadow: open
-            ? "inset rgba(0, 0, 0, 0.5) -6px 0px 10px -3px" // Somente no lado direito
+            ? "inset rgba(0, 0, 0, 0.5) -2px 0px 10px -3px"
             : "none",
           },
         }}
@@ -117,7 +117,8 @@ export default function NavBar() {
           flexDirection: 'column',
           alignItems: open ? 'center' : 'flex-start',
           justifyContent: 'center',
-          pt: 2
+          pt: 2,
+          pb: 10,
         }}>
           <Box sx={{ 
             width: '100%',
@@ -155,7 +156,7 @@ export default function NavBar() {
                 {user?.nome}
               </Typography>
               <Typography sx={{ 
-                color: 'black', 
+                color: 'blue', 
                 whiteSpace: 'nowrap',
                 fontSize: '12px',
                 opacity: 0.8
@@ -166,7 +167,11 @@ export default function NavBar() {
           </Box>
         </Box>
         
-        <List>
+        <List sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap:"5px"
+        }}>
           {/* Item Home */}
           <ListItem 
             onClick={() => navigate(routes.home)}

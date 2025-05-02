@@ -19,9 +19,9 @@ function Rembolsos() {
 
       <div className={styles.container}>
         <header>
-          <HomeOutlinedIcon sx={{color: "#282c2c"}} />
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
-          <p>Reembolsos</p>
+        <HomeOutlinedIcon sx={{color: "#282c2c", marginBottom: "-7px"}} />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
+          <p> Reembolsos</p>
         </header>
         <main className={styles.mainReembolsos}>
           <div className={styles.container_reembolso}>

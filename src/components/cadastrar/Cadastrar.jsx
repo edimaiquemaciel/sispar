@@ -13,20 +13,19 @@ import { useContext } from "react";
 import { AuthContext } from "../../authcontext/AuthContext";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import "primeicons/primeicons.css"
-import "primeflex/primeflex.css"
 import { Loader } from "lucide-react";
 
 
 function Cadastrar() {
-  const {singup} = useContext(AuthContext);
+  const {signup} = useContext(AuthContext);
   const navigate = useNavigate();
   const {register, handleSubmit, getValues, setValue, setError, clearErrors, setFocus, reset, control, formState: {isSubmitting, errors}} = useForm({ 
     resolver: zodResolver(registerSchema),
     
   });
   const registerWithMask = useHookFormMask(register);
+
+  
   const onSubmit = async (data) => {
     delete data.terms;
     delete data.confirmacao_senha;
@@ -35,13 +34,12 @@ function Cadastrar() {
       telefone: data.telefone.replace(/\D/g, ""),
       cep: data.cep.replace(/\D/g, "")
     };
+    console.log(sanitizedData);
+    
     try {
-      const sucesso = await singup(sanitizedData);
+      const sucesso = await signup(sanitizedData);
       if(sucesso === "Dado cadastrado com sucesso"){
-        reset({
-          // outros campos com suas strings vazias normais
-          salario: null // Importante usar null em vez de string vazia para campos numéricos
-        });
+        reset({ salario: null });
         window.scrollTo({ top: 0, behavior: 'smooth' });
         toast.success("Cadastro realizado com sucesso!", {
           duration: 5000,
@@ -60,18 +58,20 @@ function Cadastrar() {
             color: 'red',
           },
       })
-      setError("email",{
-        type: "manual",
-        message: error.message
-      })
-      setFocus("email");
+      if(error.message === "Já existe um colaborador com esse e-mail."){
+        setError("email",{
+          type: "manual",
+          message: error.message
+        })
+        setFocus("email");
+      }
     }
   }
 
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 50); // ou até 100ms, se precisar
+    }, 50);
   }, []);
   
   
@@ -163,6 +163,7 @@ function Cadastrar() {
                 <InputNumber
                   id="salario"
                   value={field.value}
+                  onBlur={field.onBlur}
                   onValueChange={(e) => field.onChange(e.value)}
                   mode="currency"
                   currency="BRL"
@@ -194,14 +195,14 @@ function Cadastrar() {
           </div>
           <div className={styles.inputWrapper}>
             <label htmlFor="endereco">Endereço</label>
-            <InputText id="endereco" readOnly {...register("endereco")} invalid={!!errors.endereco}/>
+            <InputText id="endereco" placeholder="Informe seu endereço" readOnly {...register("endereco")} invalid={!!errors.endereco}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="endereco" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
             <label htmlFor="cidade">Cidade</label>
-            <InputText id="cidade" readOnly  {...register("cidade")} invalid={!!errors.cidade}/>
+            <InputText id="cidade" placeholder="Informe sua cidade" readOnly  {...register("cidade")} invalid={!!errors.cidade}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="cidade" />
             </p>
@@ -219,6 +220,7 @@ function Cadastrar() {
                   onBlur={field.onBlur}
                   toggleMask
                   style={{ display: "block" }}
+                  placeholder="********"
                   promptLabel="Digite sua senha" 
                   weakLabel="Senha fraca" 
                   mediumLabel="Senha média" 
@@ -254,7 +256,8 @@ function Cadastrar() {
                   onBlur={field.onBlur}
                   toggleMask
                   style={{ display: "block" }}
-                  promptLabel="Digite sua senha" 
+                  placeholder="********"
+                  promptLabel="Confirme sua senha" 
                   weakLabel="Senha fraca" 
                   mediumLabel="Senha média" 
                   strongLabel="Senha forte"
