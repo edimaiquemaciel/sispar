@@ -10,21 +10,18 @@ import NumeroSolicitados from "../../assets/Dashboard/N-Solicitados.png";
 import Sistema from "../../assets/Dashboard/Sistema-atualizado.png";
 import SolicitarHistorico from "../../assets/Dashboard/Solicitar - Histórico.png";
 import SolicitarReembolso from "../../assets/Dashboard/Solicitar - Reembolso.png";
-//importando a NavBar no Reembolsos
-import NavBar from "../navbar/NavBar.jsx"
 
 function Rembolsos() {
   const navigate = useNavigate()
 
   return (
     <div className={styles.body}>
-      <NavBar />
 
       <div className={styles.container}>
         <header>
-          <HomeOutlinedIcon sx={{color: "#282c2c"}} />
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
-          <p>Reembolsos</p>
+        <HomeOutlinedIcon sx={{color: "#282c2c", marginBottom: "-7px"}} />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
+          <p> Reembolsos</p>
         </header>
         <main className={styles.mainReembolsos}>
           <div className={styles.container_reembolso}>

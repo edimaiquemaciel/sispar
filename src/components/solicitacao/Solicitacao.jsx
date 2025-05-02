@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import { Trash2, Save, Delete, SquareCheckBig, X, StickyNote } from "lucide-react";
 
-import NavBar from "../navbar/NavBar.jsx";
 import styles from "./Solicitacao.module.scss";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import toast from "react-hot-toast";
-
-import Overlay from "../modals/Overlay/Overlay.jsx";
 import LimparCamposModal from "../modals/LimparCamposModal/LimparCamposModal.jsx";
 import ExcluirDadosModal from "../modals/ExcluirDadosModal/ExcluirDadosModal.jsx";
 import CancelarSolicitacaoModal from "../modals/CancelarSolicitacaoModal/CancelarSolicitacaoModal.jsx";
+
 
 
 import { useForm } from "react-hook-form";
@@ -20,6 +18,7 @@ import { useForm } from "react-hook-form";
 import Api from "../../Services/Api.jsx";
 
 import "../../global.scss"
+import OverlayDom from "../modals/Overlay/OverlayDom.jsx";
 
 function Solicitacao() {
 
@@ -93,17 +92,20 @@ function Solicitacao() {
   
   return (
     <div className={styles.layoutSolicitacao}>
-      <Overlay show={modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao} />
+      {modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao ? (
+        <OverlayDom opacity={1} visibility={"visible"} zindex={1500} />
+      ) : (
+        <OverlayDom opacity={0} visibility={"hidden"} zindex={1500} />
+      )}
       <LimparCamposModal show={modaLimparCampos} reset={reset} setModalLimparCampos={setModalLimparCampos} />
       <ExcluirDadosModal show={modalExcluirDados} handleDelete={handleDelete} getIndex={getIndex} setModalExluirDados={setModalExluirDados} />
       <CancelarSolicitacaoModal show={modalCancelarSolicitacao} cancelarSolicitacao={cancelarSolicitacao} setModalCancelarSolicitacao={setModalCancelarSolicitacao} />
-      <NavBar />
       <div className={styles.containerPrincipalSolicitacao}>
         <header className={styles.headerSolicitacao}>
-          <HomeOutlinedIcon sx={{color: "#282c2c"}} />
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
+          <HomeOutlinedIcon sx={{color: "#282c2c", marginBottom: "-7px"}} />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
           <p> Reembolsos</p>
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4"}} />
+          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
           <p>Solicitação de Reembolsos</p>
         </header>
 
@@ -279,8 +281,9 @@ function Solicitacao() {
                     </div>
                   </div>
                 </div>
-
-                <div className={styles.distancia}>
+              </div>
+              <div className={styles.formGrupo2G3}>
+              <div className={styles.distancia}>
                   <label htmlFor="distancia">Dist. / Km</label>
                   <input
                     name="distanciaKm"
@@ -406,33 +409,44 @@ function Solicitacao() {
                 </tbody>
               </table>
             </div>
-          ) : ""}
+          ) : (
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className={styles.hover_none}  style={{ textAlign: 'center', padding: '2rem'}}>
+                        Nenhum registro encontrado.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+          )}
         </main>
         <footer className={styles.footerSolicitacao}>
           <section>
-            <div className={styles.inputFooter}>
-              <label> Total Faturado </label>
-
-              <input
-                type="text"
-                readOnly
-                value={dadosReembolso
-                  .reduce(
-                    (total, item) => total + Number(item.valorFaturado || 0),
-                    0
-                  )
-                  .toFixed(2)}
-              />
-            </div>
-            <div>
-              <label> Total Despesa </label>
-              <input
-                type="text"
-                readOnly
-                value={dadosReembolso
-                  .reduce((total, item) => total + Number(item.despesa || 0), 0)
-                  .toFixed(2)}
-              />
+            <div className={styles.total}>
+              <div className={styles.inputFooter}>
+                <label> Total Faturado </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={dadosReembolso
+                    .reduce(
+                      (total, item) => total + Number(item.valorFaturado || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                />
+              </div>
+              <div className={styles.inputFooter}>
+                <label> Total Despesa </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={dadosReembolso
+                    .reduce((total, item) => total + Number(item.despesa || 0), 0)
+                    .toFixed(2)}
+                />
+              </div>
             </div>
 
             <div className={styles.boxButtonFooter}>
