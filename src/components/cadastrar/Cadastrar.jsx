@@ -220,7 +220,7 @@ function Cadastrar() {
                   onBlur={field.onBlur}
                   toggleMask
                   style={{ display: "block" }}
-                  placeholder="********"
+                  placeholder="Digite sua senha"
                   promptLabel="Digite sua senha" 
                   weakLabel="Senha fraca" 
                   mediumLabel="Senha média" 
@@ -256,7 +256,7 @@ function Cadastrar() {
                   onBlur={field.onBlur}
                   toggleMask
                   style={{ display: "block" }}
-                  placeholder="********"
+                  placeholder="Confirme sua senha"
                   promptLabel="Confirme sua senha" 
                   weakLabel="Senha fraca" 
                   mediumLabel="Senha média" 
