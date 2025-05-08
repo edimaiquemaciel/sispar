@@ -8,18 +8,21 @@ import { useForm, Controller } from "react-hook-form";
 import { loginSchema } from "../../schemas/login";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {ErrorMessage} from "@hookform/error-message"
-
+import { Loader } from "lucide-react";
+import { useRef } from "react";
+import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';        
+import { Password } from 'primereact/password';
         
 
 function Login() {
-
-  const {login} = useContext(AuthContext);
-  const {register, handleSubmit, control, formState: {errors}} = useForm({
+  const toast = useRef(null);
+  const {login, isTabletScreen, isDesktopScreen} = useContext(AuthContext);
+  const {register, handleSubmit, control, formState: {errors, isSubmitting}} = useForm({
     resolver: zodResolver(loginSchema)
   });
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
+  
 
   const onSubmit = async (data) => {
     
@@ -33,8 +36,26 @@ function Login() {
     }
     } catch (error) {
       console.log("Erro no login:", error);
-      setError(error.message);
-      
+      if(error.message === "Usuário não encontrado.") {
+        toast.current.show({ 
+          severity: 'error', 
+          detail: error.message,
+          life: 4500,
+          style: {
+          transform: isDesktopScreen ? "translateX(-5%)" : "",
+          marginBottom: "16px"
+        }});
+        setError(error.message);
+      }else if(error.message === "Credenciais invalidas"){
+        toast.current.show({ 
+          severity: 'error', 
+          detail: "Senha incorreta",
+          life: 4500,
+          style: {
+          transform: isDesktopScreen ? "translateX(-5%)" : ""
+        }});
+        setError(error.message);
+      }
     }
   }
 
@@ -43,10 +64,12 @@ function Login() {
 
   return (
     <main className={styles.mainLogin}>
+      
       <section className={styles.containerFoto}>
       </section>
 
       <section className={styles.formWapper}>
+        <Toast ref={toast} position={isTabletScreen ? "top-center" : "top-right"}/>
         <div className={styles.boxLogo}>
           <img src={Logo} alt="Logo da wilson sons" />
           <h1>Boas vindas ao Novo Portal SISPAR </h1>
@@ -61,8 +84,9 @@ function Login() {
               placeholder="Email"
               {...register("email")}
               onInput={()=> setError('')}
+              invalid={!!errors.email || error === "Usuário não encontrado."}
             />
-            <p style={{color: "red", margin: "0", padding: "0"}}>
+            <p>
               <ErrorMessage errors={errors} name="email" />
             </p>
           </div>
@@ -80,23 +104,23 @@ function Login() {
                   toggleMask
                   style={{ display: "block" }}
                   feedback={false}
-                  invalid={!!errors.senha}
+                  invalid={!!errors.senha || error === "Credenciais invalidas"}
                   inputRef={field.ref}
                   placeholder="Senha"
                 />
               )}
             />
-            <p style={{color: "red", margin: "0", padding: "0"}}>
+            <p>
               <ErrorMessage errors={errors} name="senha" />
             </p>
           </div>
           
-          {error && <p style={{color: "red", margin: "0", padding: "0"}}>{error}</p>}
-
           <p><a href="#">Esqueceu a senha?</a></p>
 
           <div className={styles.boxButton}>
-            <button type="submit" >Entrar</button>
+            <button type="submit" >
+              {isSubmitting ? <Loader className={styles.spin} /> : "Entrar"}
+            </button>
             <button type="button" onClick={()=> navigate("/cadastrar")}>Criar conta</button>
           </div>
         </form>

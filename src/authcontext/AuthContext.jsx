@@ -1,4 +1,6 @@
 import { createContext, useState, useEffect } from "react";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {jwtDecode} from "jwt-decode";
 import Api from "../Services/Api.jsx"
 
 const AuthContext = createContext();
@@ -6,12 +8,29 @@ const AuthContext = createContext();
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const isDesktopScreen = useMediaQuery('(min-width:1440px)');
+    const isTabletScreen = useMediaQuery('(max-width:768px)');
+    const isSmartPhoneScreen = useMediaQuery('(max-width:412px)');
 
     useEffect(() => {
         const savedUser = localStorage.getItem("user");
-        if(savedUser) {
+        const savedToken = localStorage.getItem("token");
+        
+        try {
+          const { exp } = jwtDecode(savedToken);
+
+          if (Date.now() < exp * 1000) {
             setUser(JSON.parse(savedUser));
+          } else {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+          }
+        } catch (error) {
+          console.error("Token inválido:", error);
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
         }
+
         setLoading(false);
 
     }, [])
@@ -27,15 +46,20 @@ const AuthProvider = ({children}) => {
           
       
           if (res.status === 200 && data.mensagem === "Login realizado com sucesso") {
-            const fakeToken = 'token-falso-123';
+            const token = data.token;
+            const { exp } = jwtDecode(token);
+            if (Date.now() >= exp * 1000) {
+              throw new Error("Token expirado. Faça login novamente.");
+            }
             const user = {
               email: data.email,
               nome: data.nome,
               cargo: data.cargo,
+              id_colaborador: data.id
             };
             setUser(user);
             localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('token', fakeToken);
+            localStorage.setItem('token', token);
             return true;
           }
         } catch (error) {
@@ -73,8 +97,9 @@ const AuthProvider = ({children}) => {
         localStorage.removeItem("token");
     }
 
+
     return (
-        <AuthContext.Provider value={{user, login, logout, signup, loading}}>
+        <AuthContext.Provider value={{user, login, logout, signup, isTabletScreen, isSmartPhoneScreen, isDesktopScreen, loading}}>
             {children}
         </AuthContext.Provider>
     )

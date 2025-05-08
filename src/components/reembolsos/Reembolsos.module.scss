@@ -4,6 +4,12 @@
   padding-left: 5px;
   padding-top: 10px;
   background-color: #FFFFFF;
+  min-height: 100dvh;
+  
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding-left: 0;
+  }
 
   .container {
     display: flex;
@@ -14,38 +20,59 @@
       width: 100%;
       display: flex;
       align-items: flex-end;
-
+      background-color: #FFFFFF;
+      
       p {
         margin-bottom: -4px;
         font-size: 12px;
         text-decoration: none;
         color: #000000;
       }
+      @media (max-width: 768px) {
+        padding-left: 67px;
+        padding-bottom: 5px;
+        position: fixed;
+        top: 0;
+        z-index: 1;
+        height: 45px;
+        align-items: center;
+      }
     }
 
     .mainReembolsos {
       width: 100%;
-      height: 95vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin: 0 auto;
+      flex: 1;
+      @media (max-width: 768px) {
+        padding-inline: 8px;
+      }
       h1 {
         font-size: 2rem;
         font-weight: 700;
+        @media (max-width: 412px) {
+          margin-top: 50px;
+        }
       }
 
       .container_reembolso {
-        min-width: 750px;
-        max-width: 900px;
+        max-width: 46.875rem;
+
+        @media (max-width: 768px) {
+          width: 98%;
+        }
+        
 
         .containerCards {
           display: flex;
           justify-content: space-between;
-
+          flex-wrap: wrap;
+          gap: 10px;
+       
           .card {
-            width: 15vw;
+            width: calc(215.3px - 5px);
             height: 20vh;
             display: flex;
             flex-direction: column;
@@ -55,12 +82,22 @@
             border-radius: 6px;
             margin-top: 1rem;
             transition: all 0.3s ease-in-out;
+            @media (max-width: 768px) {
+              width: calc(240px - 8px);
+            }
+            @media (max-width: 412px) {
+              width: 90%;
+            }
           }
           
           .card:hover{
             background-color: #f1f4f9;
             box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.205);
             cursor: pointer;
+          }
+
+          @media (max-width: 412px) {
+            justify-content: center;
           }
         }
 
@@ -110,14 +147,16 @@
         }
 
         .containerSistema {
-          width: 15vw;
           height: 10vh;
           display: flex;
-          justify-content: space-evenly;
-          margin-top: 1rem;
+          justify-content: flex-start;
           align-items: center;
+          gap: 10px;
+          margin-top: 1rem;
+         
         }
       }
+
     }
     
   }

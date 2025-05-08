@@ -15,11 +15,13 @@ import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import 'primereact/resources/primereact.min.css';
 import "primeicons/primeicons.css"
 import "primeflex/primeflex.css"
+import NotFound from './components/notfound/NotFound.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Navigate to="/login" />,
+    errorElement: <NotFound />,
   },
   {
     path: "/login",

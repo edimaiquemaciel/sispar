@@ -9,14 +9,14 @@ import { useHookFormMask } from "use-mask-input";
 import { InputText } from "primereact/inputtext";
 import { Password } from 'primereact/password';
 import { InputNumber } from 'primereact/inputnumber';
-import { useContext } from "react";
 import { AuthContext } from "../../authcontext/AuthContext";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useRef, useContext } from "react";
 import { Loader } from "lucide-react";
+import { Toast } from 'primereact/toast';
 
 
 function Cadastrar() {
+  const toast = useRef(null);
   const {signup} = useContext(AuthContext);
   const navigate = useNavigate();
   const {register, handleSubmit, getValues, setValue, setError, clearErrors, setFocus, reset, control, formState: {isSubmitting, errors}} = useForm({ 
@@ -34,30 +34,31 @@ function Cadastrar() {
       telefone: data.telefone.replace(/\D/g, ""),
       cep: data.cep.replace(/\D/g, "")
     };
-    console.log(sanitizedData);
     
     try {
       const sucesso = await signup(sanitizedData);
       if(sucesso === "Dado cadastrado com sucesso"){
         reset({ salario: null });
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        toast.success("Cadastro realizado com sucesso!", {
-          duration: 5000,
-          icon: "✅"
-        });
-        
+        toast.current.show({ 
+          severity: 'success', 
+          detail: "Cadastro realizado com sucesso!",
+          life: 5000,
+          style: {backgroundColor: "#FFFFFF", width: "28rem"}
+          });
+
         setTimeout(() => {
           navigate("/login");
         }, 6000);
       }
       
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-center",
-          style: {
-            color: 'red',
-          },
-      })
+      toast.current.show({ 
+        severity: 'error', 
+        detail: error.message,
+        life: 5000,
+        style: {backgroundColor: "#FFFFFF", width: "28rem"}
+        });
       if(error.message === "Já existe um colaborador com esse e-mail."){
         setError("email",{
           type: "manual",
@@ -124,6 +125,7 @@ function Cadastrar() {
 
   return (
     <main className={styles.containerCadastro}>
+      <Toast ref={toast} position="top-center"/>
       <section className={styles.contentCadastro}>
         <div className={styles.cabecalhoCadastro}>
           <img src={Logo} alt="Logo da wilson sons" />
@@ -134,28 +136,28 @@ function Cadastrar() {
           <p className={styles.form_title}><i className="pi pi-user" style={{ fontSize: '1.5rem', color: "#1DACFB", marginBottom: "10px" }}></i>Dados Pessoais</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.inputWrapper}>
-            <label htmlFor="nome">Nome Completo</label>
+            <label htmlFor="nome">Nome Completo*</label>
             <InputText placeholder="Digite seu nome completo" id="nome" {...register("nome")} invalid={!!errors.nome}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="nome" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="email">E-mail</label>
+            <label htmlFor="email">E-mail*</label>
             <InputText placeholder="seu@email.com" id="email" {...register("email")} invalid={!!errors.email} />
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="email" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="cargo">Cargo</label>
+            <label htmlFor="cargo">Cargo*</label>
             <InputText placeholder="Informe seu cargo" id="cargo" {...register("cargo")} invalid={!!errors.cargo}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="cargo" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="salario">Salário</label>
+            <label htmlFor="salario">Salário*</label>
             <Controller
               name="salario"
               control={control}
@@ -180,35 +182,35 @@ function Cadastrar() {
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="telefone">Telefone</label>
-            <InputText id="telefone" placeholder="(99) 99999-9999" {...registerWithMask("telefone", "(99) 99999-9999")} invalid={!!errors.telefone}/>
+            <label htmlFor="telefone">Telefone*</label>
+            <InputText type="tel" id="telefone" placeholder="(99) 99999-9999" {...registerWithMask("telefone", "(99) 99999-9999")} invalid={!!errors.telefone}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="telefone" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="cep">CEP</label>
+            <label htmlFor="cep">CEP*</label>
             <InputText placeholder="99999-99" id="cep" {...registerWithMask("cep", "99999-999")} onBlur={()=> buscaCep()} invalid={!!errors.cep}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="cep" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="endereco">Endereço</label>
+            <label htmlFor="endereco">Endereço*</label>
             <InputText id="endereco" placeholder="Informe seu endereço" readOnly {...register("endereco")} invalid={!!errors.endereco}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="endereco" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="cidade">Cidade</label>
+            <label htmlFor="cidade">Cidade*</label>
             <InputText id="cidade" placeholder="Informe sua cidade" readOnly  {...register("cidade")} invalid={!!errors.cidade}/>
             <p className={styles.ErrorMessage}>
               <ErrorMessage errors={errors} name="cidade" />
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="senha">Senha</label>
+            <label htmlFor="senha">Senha*</label>
             <Controller
               name="senha"
               control={control}
@@ -244,7 +246,7 @@ function Cadastrar() {
             </p>
           </div>
           <div className={styles.inputWrapper}>
-            <label htmlFor="confirmacao_senha">Confirmar Senha</label>
+            <label htmlFor="confirmacao_senha">Confirmar Senha*</label>
             <Controller
               name="confirmacao_senha"
               control={control}

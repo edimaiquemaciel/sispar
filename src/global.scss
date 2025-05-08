@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 *{
-    margin:0;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Inter", serif;
@@ -8,3 +8,26 @@
         border-radius: 6px;
     }
 }
+
+body, html  {
+    height: 100dvh;
+}
+
+
+.p-toast .p-toast-message .p-toast-message-content {
+    padding: 1rem;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+    margin: 0 0 0 1rem;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail {
+    margin: 0.5rem 0 0 0;
+}
+
+.p-invalid {
+    border-color: #e24c4c !important;
+    box-shadow: 0 0 0 0.2rem rgba(226, 76, 76, 0.25) !important;
+  }
+

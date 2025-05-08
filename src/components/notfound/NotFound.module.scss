@@ -1,0 +1,36 @@
+.containerNotfound {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 100vh;
+
+    div {
+        text-align: center;
+        h1 {
+            font-size: 7rem;
+            color: #00B4D8;
+        }
+        p {
+            font-size: 2.5rem;
+            color: #0A2050;
+        }
+    }
+    p {
+        color: #555;
+    }
+
+    button  {
+        background-color: #0A2050;
+        color: #FFFFFF;
+        padding: 10px 20px;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        &:hover {
+            background-color: #0e2d70;
+        }
+    }
+}

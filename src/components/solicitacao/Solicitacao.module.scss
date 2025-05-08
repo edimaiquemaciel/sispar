@@ -1,13 +1,17 @@
 .layoutSolicitacao {
   display: flex;
   margin-left: 4.2rem;
-  padding: 10px 0 20px 5px;
+  padding: 10px 0 0 5px;
   background-color: #FFFFFF;
+  @media (max-width: 768px) {
+    padding-top: 0;
+    margin-left: 0;
+  }
 }
 
 .containerPrincipalSolicitacao {
   width: 100%;
-  min-height: calc(100vh - 30px);
+  min-height: calc(100dvh - 30px);
   display: flex;
   flex-direction: column;
   transition: all .5s ease-in-out;
@@ -21,23 +25,25 @@
   input,
   select,
   textarea {
-    border-radius: 6px;
-    border: solid #cbd4e1 0.8px;
     height: 4vh;
     width: 100%;
     appearance: none;
-    transition: box-shadow 0.4s ease-in-out, border-color 0.4s ease-in-out;
+    border: 1px solid #ced4da;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    background-color: #fff;
+    border-radius: 6px;
+    color: #495057;
+    outline: none;
     z-index: -1;
+    &::placeholder {
+      color: #000000;
+    }
     &:focus {
-      box-shadow: 
-      0 0 0 2px #027af2,       /* Borda interna azul claro */
-      0 0 4px 2px rgba(2, 122, 242, 0.3), /* Efeito de glow externo */
-      0 0 6px 3px rgba(3, 62, 119, 0.2); /* Sombra mais difusa (azul escuro) */
-      outline: none;              /* Remove o outline padrão */
-      border-color: transparent;  /* Opcional: remove a borda nativa */
+      border-color: #2c9bbf;
+      box-shadow: 0 0 0 0.2rem rgba(44, 155, 191, 0.25);
     }
     &:hover {
-      border-color: #23282F;
+      border-color: #7fc8de;
     }
   }
   
@@ -58,12 +64,31 @@
   width: 100%;
   display: flex;
   align-items: flex-end;
+  background-color: #FFFFFF;
+  .icon {
+    color: #d0d4e4;
+    font-size: 20px;
+    margin-bottom: -5.5px;
+  }
 
   p {
     margin-bottom: -4px;
     font-size: 12px;
     text-decoration: none;
     color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    height: 45px;
+    align-items: center;
+    padding-left: 63px;
+    padding-bottom: 5px;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    .icon, p {
+      margin-bottom: -12px;
+    }
   }
 }
 
@@ -76,36 +101,43 @@
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .formGrupo1 {
   width: 35%;
   height: 25vh;
-  // border: solid green;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
   margin-left: 5px;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
 .inputNome {
   width: 45%;
+  position: relative;
 }
 
 .inputEmpresa {
   width: 25%;
+  position: relative;
 }
 
 .inputPrestacao {
   width: 25%;
+  position: relative;
 }
 
 .inputMotivo {
   width: 100%;
-
   textarea {
-    height: 14vh;
+    height: 12.5vh;
   }
 }
 
@@ -114,6 +146,9 @@
   background-color: #cbd4e1;
   height: 25vh;
   width: 0.1vw;
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 
@@ -124,8 +159,10 @@
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  gap: 5px;
   padding-top: -5px;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
 .formGrupo2G1,
@@ -172,6 +209,7 @@
 .valorKm,
 .valorFaturado,
 .despesa {
+  position: relative;
   flex: 1;
 }
 
@@ -230,8 +268,14 @@
 }
 
 .container_tabela {
-  max-height: 420px;
+  max-height: calc(420px - 30px);
   overflow-y: auto;
+  margin-top: 20px;
+}
+
+.container_tabela::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 
@@ -252,6 +296,9 @@ th {
   min-width: 30px;
   border: 2px solid #ccc;
   padding: 5px;
+  position: sticky;
+  top: -1px;
+  z-index: 1;
 }
 
 tr {
@@ -288,9 +335,6 @@ td {
   gap: 50px;
   width: 100%;
   height: 15vh;
-  position: absolute;
-  bottom: 0;
-  right: 0;
 
   section {
     display: flex;
@@ -319,6 +363,14 @@ td {
       border: none;
       transition: background-color .4s ease-in-out;
       padding: 12px 15px;
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        opacity: 0.6;
+        &:hover {
+          background-color: #ccc;
+        }
+      }
       &:hover {
         background-color: #5890c9;
       }
@@ -372,6 +424,7 @@ td {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  z-index: 10000;
   svg {
     transition: transform 0.2s ease-in-out;
   }
@@ -492,4 +545,30 @@ td {
 .total {
   display: flex;
   align-items: center;
+}
+
+.ErrorMessage {
+  color: red;
+  font-size: 8px;
+  margin-left: 10px;
+}
+
+.error {
+  color: red;
+  font-size: 8px;
+  margin-top: 4px;
+  position: absolute;
+  top: 50px;
+  left: 5px;
+  z-index: 1000;
+}
+
+.error_select {
+  color: red;
+  font-size: 8px;
+  margin-top: 4px;
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  z-index: 1000;
 }

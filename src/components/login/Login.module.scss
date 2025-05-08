@@ -3,7 +3,7 @@
 
   .containerFoto {
     min-width: 65%;
-    height: 100vh;
+    height: 100dvh;
     background-image: url("../../assets/Tela\ Login/imagem tela de login.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -17,6 +17,7 @@
     justify-content: center;
     align-items: center;
     padding: min(6rem, 8%);
+    position: relative;
   
     .boxLogo {
       height: 25vh;
@@ -59,6 +60,12 @@
             border-radius: 8px;
             font-size: .9rem;
         }
+        p {
+          color: red;
+          margin: 0;
+          padding: 0;
+          text-align: center;
+        }
       }
   
       p {
@@ -94,6 +101,13 @@
               background-color: #042755;
             }
         }
+        .spin {
+          margin: -8px;
+          animation: spin 1s linear infinite;
+          @keyframes spin {
+              to { transform: rotate(360deg);}
+          }
+      }
       }
     }
   

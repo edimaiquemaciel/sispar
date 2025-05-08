@@ -1,36 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Trash2, Save, Delete, SquareCheckBig, X, StickyNote } from "lucide-react";
-
 import styles from "./Solicitacao.module.scss";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import toast from "react-hot-toast";
+import { Toast } from 'primereact/toast';
+import { useRef } from "react";
 import LimparCamposModal from "../modals/LimparCamposModal/LimparCamposModal.jsx";
 import ExcluirDadosModal from "../modals/ExcluirDadosModal/ExcluirDadosModal.jsx";
 import CancelarSolicitacaoModal from "../modals/CancelarSolicitacaoModal/CancelarSolicitacaoModal.jsx";
-
-
-
 import { useForm } from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod"
+import {ErrorMessage} from "@hookform/error-message"
+import { reembolsoSchema } from "../../schemas/reembolsoSchema.js";
 
 import Api from "../../Services/Api.jsx";
 
 import "../../global.scss"
 import OverlayDom from "../modals/Overlay/OverlayDom.jsx";
+import { AuthContext } from "../../authcontext/AuthContext.jsx";
 
 function Solicitacao() {
-
+  const {user} = useContext(AuthContext)
+  const toast = useRef(null);
   const [modaLimparCampos, setModalLimparCampos] = useState(false);
   const [modalExcluirDados, setModalExluirDados] = useState(false);
   const [modalCancelarSolicitacao, setModalCancelarSolicitacao] = useState(false);
   const [getIndex, setGetIndex] = useState(null);
   const [isClicked, setIsClicked] = useState(null);
   const [dadosReembolso, setDadosReembolso] = useState([]);
-  const {register, handleSubmit, reset, formState: {dirtyFields}} = useForm();
-  const [enviado, setEnviado] = useState(false);
+  const {register, handleSubmit, reset, formState: {dirtyFields, errors}} = useForm({
+    resolver: zodResolver(reembolsoSchema)
+  });
+  const  id_colaborador = user?.id_colaborador;
   const campoVazio = Object.keys(dirtyFields).length > 0;
+
+  
 
   const handleFocus = (id) => {
     setIsClicked(id);
@@ -43,40 +49,53 @@ function Solicitacao() {
   }
 
   const onSubmit = (data) => {
+    const sanitData = {...data, id_colaborador}
 
     if(campoVazio){
-      setDadosReembolso([...dadosReembolso, data])
+      setDadosReembolso([...dadosReembolso, sanitData])
       reset();
     }else {
-      toast.error("Por favor, preencha algum campo")
+      toast.current.show({ 
+        severity: 'error', 
+        detail: "Por favor, preencha algum campo",
+        life: 5000,
+        });
     }
   }
  
-  useEffect(() => {
-    if (enviado) {
-      setDadosReembolso([]); 
-      setEnviado(false);
-    }
-  }, [enviado]);
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NDM5ODU5NiwianRpIjoiOTdkNWI0YmUtOTU3My00ZmEzLTlkY2ItMjE2MGY3MmRiZmUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NDQzOTg1OTYsImNzcmYiOiIwNGViOTcwNy05NDFjLTQwYWItOTJiZS04ZjU0MTliNGFmOTQiLCJleHAiOjE3NDQzOTk0OTZ9.R87xKzHSVishWF8ZNjWnRnhfoEmS0GXx4sN2y6TUR70";
-
   const enviarParaAnalise = async () => {
-    try {
-      const response = await Api.post("/refunds/new", dadosReembolso, {
-        headers: {
-          authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response);
-      
-      setEnviado(true); 
-    } catch (error) {
-      console.error("Erro ao enviar:", error);
+      console.log("dentro de analise:" + dadosReembolso);
+      if(dadosReembolso.length > 0){
+        try {
+        
+          const res = await Api.post("/reembolso/solicitar-reembolso", dadosReembolso);
+          const data = await res.data;
+          console.log(data);
+          if(res.status === 201 && data.mensagem === "Solicitação de reembolso cadastrada com sucesso"){
+            toast.current.show({ 
+              severity: 'success', 
+              detail: data.mensagem,
+              life: 5000,
+              });
+            setDadosReembolso([])
+          }
+          
+        } catch (error) {
+          const msg =
+          error.response?.data?.erro ||
+          error.response?.data?.mensagem ||
+          error.message ||
+          "Erro inesperado ao solicitar reembolso";
+          toast.current.show({ 
+            severity: 'error', 
+            detail: msg,
+            life: 5000,
+            });
+          console.error("Erro ao solicitar reembolso:", error);
+        }
+      }
+
     }
-  };
 
 
   const handleDelete = (index) => {
@@ -89,9 +108,12 @@ function Solicitacao() {
     reset();
   };
 
+  console.log(dadosReembolso);
+  
   
   return (
     <div className={styles.layoutSolicitacao}>
+      <Toast ref={toast} position="top-center"/>
       {modaLimparCampos || modalExcluirDados || modalCancelarSolicitacao ? (
         <OverlayDom opacity={1} visibility={"visible"} zindex={1500} />
       ) : (
@@ -103,9 +125,9 @@ function Solicitacao() {
       <div className={styles.containerPrincipalSolicitacao}>
         <header className={styles.headerSolicitacao}>
           <HomeOutlinedIcon sx={{color: "#282c2c", marginBottom: "-7px"}} />
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
+          <KeyboardArrowRightOutlinedIcon className={styles.icon} />
           <p> Reembolsos</p>
-          <KeyboardArrowRightOutlinedIcon sx={{color: "#d0d4e4", fontSize: "20px", marginBottom: "-5.5px"}} />
+          <KeyboardArrowRightOutlinedIcon className={styles.icon} />
           <p>Solicitação de Reembolsos</p>
         </header>
 
@@ -116,30 +138,42 @@ function Solicitacao() {
           >
             <div className={styles.formGrupo1}>
               <div className={styles.inputNome}>
-                <label htmlFor="nome"> Nome Completo</label>
+                <label htmlFor="colaborador"> Nome Completo*</label>
                 <input
                   name="colaborador"
                   type="text"
                   {...register("colaborador")}
+                  className={errors.colaborador ? "p-invalid" : ""}
                 />
+                {errors.colaborador && (
+                  <small className={styles.error}>{errors.colaborador.message}</small>
+                )}
               </div>
 
               <div className={styles.inputEmpresa}>
-                <label htmlFor="empresa">Empresa</label>
+                <label htmlFor="empresa">Empresa*</label>
                 <input
                   name="empresa"
                   type="text"
                   {...register("empresa")}
+                  className={errors.empresa ? "p-invalid" : ""}
                 />
+                {errors.empresa && (
+                  <small className={styles.error}>{errors.empresa.message}</small>
+                )}
               </div>
 
               <div className={styles.inputPrestacao}>
-                <label htmlFor="prestacao"> Nº Prest. Contas</label>
+                <label htmlFor="num_prestacao"> Nº Prest. Contas*</label>
                 <input
                   type="number"
-                  name="nPrestacao"
-                  {...register("nPrestacao")}
+                  name="num_prestacao"
+                  {...register("num_prestacao")}
+                  className={errors.num_prestacao ? "p-invalid" : ""}
                 />
+                {errors.num_prestacao && (
+                  <small className={styles.error}>{errors.num_prestacao.message}</small>
+                )}
               </div>
 
               <div className={styles.inputMotivo}>
@@ -159,12 +193,13 @@ function Solicitacao() {
             <div className={styles.formGrupo2}>
               <div className={styles.formGrupo2G1}>
                 <div className={styles.inputData}>
-                  <label htmlFor="date"> Data</label>
+                  <label htmlFor="data"> Data</label>
                   <div className={styles.input_wrapper}>
                     <input
                       type="date"
                       name="data"
                       {...register("data")}
+                      onFocus={(e) => e.target.showPicker?.()}
                     />
                     <div className={styles.input_icon}> 
                       <DateRangeIcon />
@@ -173,16 +208,17 @@ function Solicitacao() {
                 </div>
 
                 <div className={styles.selectDespesas}>
-                  <label htmlFor="tipoReembolso"> Tipo de Despesa </label>
+                  <label htmlFor="tipo_reembolso"> Tipo de Despesa* </label>
 
                   <div className={styles.select_wrapper}>
                     <select
-                      name="tipoReembolso"
-                      id="tipoReembolso"
-                      {...register("tipoReembolso")}
-                      onFocus={() => handleFocus("tipoReembolso")}
+                      name="tipo_reembolso"
+                      id="tipo_reembolso"
+                      {...register("tipo_reembolso")}
+                      onFocus={() => handleFocus("tipo_reembolso")}
                       onBlur={() => handleBlur()}
-                      onInput={()=> handleSelected("tipoReembolso")}
+                      onInput={()=> handleSelected("tipo_reembolso")}
+                      className={errors.tipo_reembolso ? "p-invalid" : ""}
                     >
                       <option value="">Selecionar</option>
                       <option value="alimentacao">Alimentação</option>
@@ -194,21 +230,25 @@ function Solicitacao() {
                       <option value="eventos">Eventos de representação</option>
                     </select>
                     <div className={styles.select_icon}>
-                      <KeyboardArrowDownIcon className={isClicked === "tipoReembolso" ? styles.down : ''} />
+                      <KeyboardArrowDownIcon className={isClicked === "tipo_reembolso" ? styles.down : ''} />
                     </div>
+                    {errors.tipo_reembolso && (
+                      <small className={styles.error_select}>{errors.tipo_reembolso.message}</small>
+                    )}
                   </div>
                 </div>
 
                 <div className={styles.centroDeCusto}>
-                  <label htmlFor="custo">Centro de Custo</label>
+                  <label htmlFor="centro_custo">Centro de Custo*</label>
                   <div className={styles.select_wrapper}>
                     <select
-                      name="centroCusto"
-                      id="centroCusto"
-                      {...register("centroCusto")}
-                      onFocus={() => handleFocus("centroCusto")}
+                      name="centro_custo"
+                      id="centro_custo"
+                      {...register("centro_custo")}
+                      onFocus={() => handleFocus("centro_custo")}
                       onBlur={() => handleBlur()}
-                      onInput={()=> handleSelected("centroCusto")}
+                      onInput={()=> handleSelected("centro_custo")}
+                      className={errors.centro_custo ? "p-invalid" : ""}
                     >
                       <option value="">Selecionar</option>
 
@@ -223,20 +263,23 @@ function Solicitacao() {
                       </option>
                     </select>
                     <div className={styles.select_icon}>
-                      <KeyboardArrowDownIcon className={isClicked === "centroCusto" ? styles.down : ''} />
+                      <KeyboardArrowDownIcon className={isClicked === "centro_custo" ? styles.down : ''} />
                     </div>
+                    {errors.centro_custo && (
+                      <small className={styles.error_select}>{errors.centro_custo.message}</small>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className={styles.formGrupo2G2}>
                 <div className={styles.ordem}>
-                  <label htmlFor="ordemInterna">Ord. Int.</label>
+                  <label htmlFor="ordem_interna">Ord. Int.</label>
                   <input
-                    name="ordemInterna"
-                    id="ordemInterna"
+                    name="ordem_interna"
+                    id="ordem_interna"
                     type="number"
-                    {...register("ordemInterna")}
+                    {...register("ordem_interna")}
                   />
                 </div>
 
@@ -254,71 +297,83 @@ function Solicitacao() {
                   <label htmlFor="pep">PEP</label>
                   <input
                     name="pep"
-                    id="PEP"
+                    id="pep"
                     type="number"
                     {...register("pep")}
                   />
                 </div>
 
                 <div className={styles.moeda}>
-                  <label htmlFor="moeda">Moeda</label>
+                  <label htmlFor="moeda">Moeda*</label>
                   <div className={styles.select_wrapper}>
                     <select
                       name="moeda"
-                      id="coents"
+                      id="moeda"
                       {...register("moeda")}
                       onFocus={() => handleFocus("moeda")}
                       onBlur={() => handleBlur()}
                       onInput={()=> handleSelected("moeda")}
+                      className={errors.moeda ? "p-invalid" : ""}
                     >
                       <option value="">Selecionar</option>
-                      <option value="brl">BRL</option>
-                      <option value="ars">ARS</option>
-                      <option value="usd">USD</option>
+                      <option value="BRL">BRL</option>
+                      <option value="ARS">ARS</option>
+                      <option value="USD">USD</option>
                     </select>
                     <div className={styles.select_icon}>
                       <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
                     </div>
+                    {errors.moeda && (
+                      <small className={styles.error_select}>{errors.moeda.message}</small>
+                    )}
                   </div>
                 </div>
               </div>
               <div className={styles.formGrupo2G3}>
               <div className={styles.distancia}>
-                  <label htmlFor="distancia">Dist. / Km</label>
+                  <label htmlFor="distancia_km">Dist. / Km</label>
                   <input
-                    name="distanciaKm"
-                    id="distance-input"
-                    type="number"
-                    {...register("distanciaKm")}
+                    name="distancia_km"
+                    id="distancia_km"
+                    type="text"
+                    {...register("distancia_km")}
                   />
                 </div>
 
                 <div className={styles.valorKm}>
-                  <label htmlFor="valor">Valor / Km</label>
+                  <label htmlFor="valor_km">Valor / Km</label>
                   <input
-                    name="valorKm"
+                    name="valor_km"
                     type="number"
-                    {...register("valorKm")}
+                    {...register("valor_km")}
                   />
                 </div>
 
                 <div className={styles.valorFaturado}>
-                  <label htmlFor="faturado"> Val. Faturado </label>
+                  <label htmlFor="valor_faturado"> Val. Faturado* </label>
                   <input
                     type="number"
-                    name="valorFaturado"
-                    {...register("valorFaturado")}
+                    name="valor_faturado"
+                    {...register("valor_faturado")}
+                    className={errors.valor_faturado ? "p-invalid" : ""}
                   />
+                  {errors.valor_faturado && (
+                    <small className={styles.error}>{errors.valor_faturado.message}</small>
+                  )}
                 </div>
 
                 <div className={styles.despesa}>
-                  <label htmlFor="taxa"> Despesa </label>
+                  <label htmlFor="despesa"> Despesa* </label>
                   <input
                     type="number"
                     id="despesa"
                     name="despesa"
                     {...register("despesa")}
+                    className={errors.despesa ? "p-invalid" : ""}
                   />
+                  {errors.despesa && (
+                    <small className={styles.error}>{errors.despesa.message}</small>
+                  )}
                 </div>
 
                 <div className={styles.botoes}>
@@ -386,7 +441,7 @@ function Solicitacao() {
                       </td>
                       <td>{item.colaborador}</td>
                       <td>{item.empresa}</td>
-                      <td>{item.nPrestacao}</td>
+                      <td>{item.num_prestacao}</td>
                       <td>{item.data}</td>
 
                       <td>
@@ -394,15 +449,15 @@ function Solicitacao() {
                       </td>
 
                       {/* <td>{item.descricao}</td> */}
-                      <td>{item.tipoReembolso}</td>
-                      <td>{item.centroCusto}</td>
-                      <td>{item.ordemInterna}</td>
+                      <td>{item.tipo_reembolso}</td>
+                      <td>{item.centro_custo}</td>
+                      <td>{item.ordem_interna}</td>
                       <td>{item.divisao}</td>
                       <td>{item.pep}</td>
                       <td>{item.moeda}</td>
-                      <td>{item.distanciaKm}</td>
-                      <td>{item.valorKm}</td>
-                      <td>{item.valorFaturado}</td>
+                      <td>{item.distancia_km}</td>
+                      <td>{item.valor_km}</td>
+                      <td>{item.valor_faturado}</td>
                       <td>{item.despesa}</td>
                     </tr>
                   ))}
@@ -450,12 +505,15 @@ function Solicitacao() {
             </div>
 
             <div className={styles.boxButtonFooter}>
-              <button
-                className={styles.buttonAnalise}
-                onClick={enviarParaAnalise}
-              >
-                <SquareCheckBig /> Enviar para Análise
-              </button>
+              {dadosReembolso.length > 0 ? (
+                <button className={styles.buttonAnalise} onClick={enviarParaAnalise} >
+                  <SquareCheckBig /> Enviar para Análise
+                </button>
+              ) : (
+                <button className={styles.buttonAnalise} onClick={enviarParaAnalise} disabled>
+                  <SquareCheckBig /> Enviar para Análise
+                </button>
+              )}
 
               {dadosReembolso.length > 0 ? (<button
                 className={styles.buttonCancelar}
