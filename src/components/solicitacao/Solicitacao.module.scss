@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   transition: all .5s ease-in-out;
+  gap: 15px;
 
   label {
     font-weight: 700;
@@ -100,38 +101,49 @@
 .formMain {
   display: flex;
   justify-content: space-between;
+  min-height: 250px;
+  max-height: 700px;
   margin-top: 5px;
   @media (max-width: 768px) {
     flex-direction: column;
+    margin-top: 65px;
+    gap: 10px;
   }
 }
 
 .formGrupo1 {
-  width: 35%;
-  height: 25vh;
+  width: 45%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
+  gap: 10px;
   margin-left: 5px;
   @media (max-width: 768px) {
-    width: 95%;
+    width: 98%;
+    height: 340px;
   }
 }
 
 .inputNome {
-  width: 45%;
+  width: 100%;
   position: relative;
 }
 
 .inputEmpresa {
-  width: 25%;
+   width: 65%;
   position: relative;
 }
 
 .inputPrestacao {
-  width: 25%;
+  width: 30%;
   position: relative;
+  label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }
 
 .inputMotivo {
@@ -144,7 +156,6 @@
 
 .barraVertical {
   background-color: #cbd4e1;
-  height: 25vh;
   width: 0.1vw;
   @media (max-width: 768px) {
     display: none;
@@ -153,26 +164,32 @@
 
 
 .formGrupo2 {
-  width: 60%;
-  height: 25vh;
+  width: 50%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  align-items: center;
-  padding-top: -5px;
+  align-items: flex-start;
+  gap: 10px;
   @media (max-width: 768px) {
-    width: 95%;
+    margin-left: 5px;
+    width: 98%;
+    height: 350px;
   }
 }
 
 .formGrupo2G1,
 .formGrupo2G2,
-.formGrupo2G3 {
+.formGrupo2G3,
+.formGrupo2G4{
   width: 99%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 20px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .formGrupo2G2 {
@@ -186,14 +203,14 @@
 }
 
 .selectDespesas {
-  flex: 1;
+  width: 35%;
   select {
     padding: 0 10px;
   }
 }
 
 .centroDeCusto {
-  width: 48.5%;
+  width: 65%;
   select {
     padding: 0 10px;
   }
@@ -207,11 +224,14 @@
 }
 
 .valorKm,
-.valorFaturado,
-.despesa {
-  position: relative;
+.valorFaturado {
   flex: 1;
 }
+
+.despesa {
+  flex: 1;
+}
+
 
 .moeda {
   flex: 1;
@@ -221,7 +241,7 @@
 }
 
 .botoes {
-  width: 16%;
+  width: 20%;
   display: flex;
   justify-content: space-between;
   height: 4vh;
@@ -237,6 +257,14 @@
     cursor: pointer;
     border: none;
     transition: background-color .4s ease-in-out;
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+      &:hover {
+        background-color: #ccc;
+  }
+    }
     &:hover {
       background-color: #5890c9;
     }
@@ -285,6 +313,10 @@ table {
   border-collapse: collapse;
   margin-top: 30px;
   margin-left: 5px;
+  @media (max-width: 768px) {
+    width: 98%;
+  }
+
 }
 
 
@@ -424,7 +456,7 @@ td {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 10000;
+  z-index: 1000;
   svg {
     transition: transform 0.2s ease-in-out;
   }
@@ -557,18 +589,10 @@ td {
   color: red;
   font-size: 8px;
   margin-top: 4px;
-  position: absolute;
-  top: 50px;
-  left: 5px;
-  z-index: 1000;
 }
 
 .error_select {
   color: red;
   font-size: 8px;
   margin-top: 4px;
-  position: absolute;
-  top: 30px;
-  left: 5px;
-  z-index: 1000;
 }

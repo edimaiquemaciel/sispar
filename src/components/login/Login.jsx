@@ -35,7 +35,6 @@ function Login() {
       navigate("/reembolsos");
     }
     } catch (error) {
-      console.log("Erro no login:", error);
       if(error.message === "Usuário não encontrado.") {
         toast.current.show({ 
           severity: 'error', 
@@ -55,6 +54,14 @@ function Login() {
           transform: isDesktopScreen ? "translateX(-5%)" : ""
         }});
         setError(error.message);
+      }else if(error.message !== "Usuário não encontrado." && error.message !== "Credenciais invalidas"){
+        toast.current.show({ 
+          severity: 'error', 
+          detail: error.message,
+          life: 4500,
+          style: {
+          transform: isDesktopScreen ? "translateX(-5%)" : ""
+        }});
       }
     }
   }

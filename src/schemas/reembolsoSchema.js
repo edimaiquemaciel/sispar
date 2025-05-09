@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const reembolsoSchema = z.object({
-    colaborador: z.string().min(1, {message: "Campo obrigatório"}),
-    empresa: z.string().min(1, {message: "Campo obrigatório"}),
+    colaborador: z.string({ required_error: "Campo obrigatório" }).nonempty("Campo obrigatório"),
+    empresa: z.string({ required_error: "Campo obrigatório" }).nonempty("Campo obrigatório"),
     num_prestacao: z.preprocess(
       (val) => {
         if (val === "" || val === undefined || val === null) return undefined;
@@ -13,9 +13,9 @@ export const reembolsoSchema = z.object({
       .number({ invalid_type_error: "Campo obrigatório", required_error: "Campo obrigatório" })
       .min(0.1, { message: "Campo obrigatório" })
     ),      
-    tipo_reembolso: z.string().min(1, {message: "Campo obrigatório"}),
-    centro_custo: z.string().min(1, {message: "Campo obrigatório"}),
-    moeda: z.string().min(1, {message: "Campo obrigatório"}),
+    tipo_reembolso: z.string({ required_error: "Campo obrigatório" }).nonempty("Campo obrigatório"),
+    centro_custo: z.string({ required_error: "Campo obrigatório" }).nonempty("Campo obrigatório"),
+    moeda: z.string({ required_error: "Campo obrigatório" }).nonempty("Campo obrigatório"),
     valor_faturado: z.preprocess(
       (val) => {
         if (val === "" || val === undefined || val === null) return undefined;

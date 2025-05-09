@@ -12,11 +12,8 @@ import ExcluirDadosModal from "../modals/ExcluirDadosModal/ExcluirDadosModal.jsx
 import CancelarSolicitacaoModal from "../modals/CancelarSolicitacaoModal/CancelarSolicitacaoModal.jsx";
 import { useForm } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
-import {ErrorMessage} from "@hookform/error-message"
 import { reembolsoSchema } from "../../schemas/reembolsoSchema.js";
-
 import Api from "../../Services/Api.jsx";
-
 import "../../global.scss"
 import OverlayDom from "../modals/Overlay/OverlayDom.jsx";
 import { AuthContext } from "../../authcontext/AuthContext.jsx";
@@ -30,14 +27,12 @@ function Solicitacao() {
   const [getIndex, setGetIndex] = useState(null);
   const [isClicked, setIsClicked] = useState(null);
   const [dadosReembolso, setDadosReembolso] = useState([]);
-  const {register, handleSubmit, reset, formState: {dirtyFields, errors}} = useForm({
+  const {register, handleSubmit, reset, formState: {dirtyFields, errors, isValid}} = useForm({
     resolver: zodResolver(reembolsoSchema)
   });
   const  id_colaborador = user?.id_colaborador;
   const campoVazio = Object.keys(dirtyFields).length > 0;
-
   
-
   const handleFocus = (id) => {
     setIsClicked(id);
   }
@@ -48,18 +43,22 @@ function Solicitacao() {
     setIsClicked((prev)=> (prev === id ? null : id))
   }
 
+  const onError = (isValid) => {
+    if(!isValid){
+      toast.current.show({ 
+        severity: 'error', 
+        detail: "Por favor, preencha os campos obrigatórios",
+        life: 5000,
+        style: {width:"29rem"}
+        });
+    }
+  }
+
   const onSubmit = (data) => {
     const sanitData = {...data, id_colaborador}
-
     if(campoVazio){
       setDadosReembolso([...dadosReembolso, sanitData])
       reset();
-    }else {
-      toast.current.show({ 
-        severity: 'error', 
-        detail: "Por favor, preencha algum campo",
-        life: 5000,
-        });
     }
   }
  
@@ -97,7 +96,6 @@ function Solicitacao() {
 
     }
 
-
   const handleDelete = (index) => {
     setDadosReembolso(prev => prev.filter((item, i) => i !== index));
   };
@@ -107,9 +105,6 @@ function Solicitacao() {
     setDadosReembolso([]); 
     reset();
   };
-
-  console.log(dadosReembolso);
-  
   
   return (
     <div className={styles.layoutSolicitacao}>
@@ -141,6 +136,7 @@ function Solicitacao() {
                 <label htmlFor="colaborador"> Nome Completo*</label>
                 <input
                   name="colaborador"
+                  id="colaborador"
                   type="text"
                   {...register("colaborador")}
                   className={errors.colaborador ? "p-invalid" : ""}
@@ -154,6 +150,7 @@ function Solicitacao() {
                 <label htmlFor="empresa">Empresa*</label>
                 <input
                   name="empresa"
+                  id="empresa"
                   type="text"
                   {...register("empresa")}
                   className={errors.empresa ? "p-invalid" : ""}
@@ -167,6 +164,7 @@ function Solicitacao() {
                 <label htmlFor="num_prestacao"> Nº Prest. Contas*</label>
                 <input
                   type="number"
+                  id="num_prestacao"
                   name="num_prestacao"
                   {...register("num_prestacao")}
                   className={errors.num_prestacao ? "p-invalid" : ""}
@@ -182,6 +180,7 @@ function Solicitacao() {
                 </label>
 
                 <textarea
+                  id="descricao"
                   name="descricao"
                   {...register("descricao")}
                 />
@@ -192,78 +191,67 @@ function Solicitacao() {
 
             <div className={styles.formGrupo2}>
               <div className={styles.formGrupo2G1}>
-                <div className={styles.inputData}>
-                  <label htmlFor="data"> Data</label>
-                  <div className={styles.input_wrapper}>
-                    <input
-                      type="date"
-                      name="data"
-                      {...register("data")}
-                      onFocus={(e) => e.target.showPicker?.()}
-                    />
-                    <div className={styles.input_icon}> 
-                      <DateRangeIcon />
-                    </div>
-                  </div>
-                </div>
-
+                                
                 <div className={styles.selectDespesas}>
                   <label htmlFor="tipo_reembolso"> Tipo de Despesa* </label>
 
-                  <div className={styles.select_wrapper}>
-                    <select
-                      name="tipo_reembolso"
-                      id="tipo_reembolso"
-                      {...register("tipo_reembolso")}
-                      onFocus={() => handleFocus("tipo_reembolso")}
-                      onBlur={() => handleBlur()}
-                      onInput={()=> handleSelected("tipo_reembolso")}
-                      className={errors.tipo_reembolso ? "p-invalid" : ""}
-                    >
-                      <option value="">Selecionar</option>
-                      <option value="alimentacao">Alimentação</option>
-                      <option value="combustivel">Combustível</option>
-                      <option value="conducao">Condução</option>
-                      <option value="estacionamento">Estacionamento</option>
-                      <option value="viagem adm">Viagem admin.</option>
-                      <option value="viagem oper"> Viagem operacional</option>
-                      <option value="eventos">Eventos de representação</option>
-                    </select>
-                    <div className={styles.select_icon}>
-                      <KeyboardArrowDownIcon className={isClicked === "tipo_reembolso" ? styles.down : ''} />
+                  <div>
+                    <div className={styles.select_wrapper}>
+                      <select
+                        name="tipo_reembolso"
+                        id="tipo_reembolso"
+                        {...register("tipo_reembolso")}
+                        onFocus={() => handleFocus("tipo_reembolso")}
+                        onBlur={() => handleBlur()}
+                        onInput={()=> handleSelected("tipo_reembolso")}
+                        className={errors.tipo_reembolso ? "p-invalid" : ""}
+                      >
+                        <option value="">Selecionar</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="combustivel">Combustível</option>
+                        <option value="conducao">Condução</option>
+                        <option value="estacionamento">Estacionamento</option>
+                        <option value="viagem adm">Viagem admin.</option>
+                        <option value="viagem oper"> Viagem operacional</option>
+                        <option value="eventos">Eventos de representação</option>
+                      </select>
+                      <div className={styles.select_icon}>
+                        <KeyboardArrowDownIcon className={isClicked === "tipo_reembolso" ? styles.down : ''} />
+                      </div>
                     </div>
-                    {errors.tipo_reembolso && (
-                      <small className={styles.error_select}>{errors.tipo_reembolso.message}</small>
-                    )}
+                     {errors.tipo_reembolso && (
+                        <small className={styles.error_select}>{errors.tipo_reembolso.message}</small>
+                      )}
                   </div>
                 </div>
 
                 <div className={styles.centroDeCusto}>
                   <label htmlFor="centro_custo">Centro de Custo*</label>
-                  <div className={styles.select_wrapper}>
-                    <select
-                      name="centro_custo"
-                      id="centro_custo"
-                      {...register("centro_custo")}
-                      onFocus={() => handleFocus("centro_custo")}
-                      onBlur={() => handleBlur()}
-                      onInput={()=> handleSelected("centro_custo")}
-                      className={errors.centro_custo ? "p-invalid" : ""}
-                    >
-                      <option value="">Selecionar</option>
-
-                      <option value="FIN CONTROLES INTERNOS MTZ">
-                        1100109002 - FIN CONTROLES INTERNOS MTZ
-                      </option>
-                      <option value="FIN VICE-PRESIDENCIA FINANCAS MTZ">
-                        1100110002 - FIN VICE-PRESIDENCIA FINANCAS MTZ
-                      </option>
-                      <option value="FIN CONTABILIDADE MTZ">
-                        1100110101 - FIN CONTABILIDADE MTZ
-                      </option>
-                    </select>
-                    <div className={styles.select_icon}>
-                      <KeyboardArrowDownIcon className={isClicked === "centro_custo" ? styles.down : ''} />
+                  <div>
+                    <div className={styles.select_wrapper}>
+                      <select
+                        name="centro_custo"
+                        id="centro_custo"
+                        {...register("centro_custo")}
+                        onFocus={() => handleFocus("centro_custo")}
+                        onBlur={() => handleBlur()}
+                        onInput={()=> handleSelected("centro_custo")}
+                        className={errors.centro_custo ? "p-invalid" : ""}
+                      >
+                        <option value="">Selecionar</option>
+                        <option value="FIN CONTROLES INTERNOS MTZ">
+                          1100109002 - FIN CONTROLES INTERNOS MTZ
+                        </option>
+                        <option value="FIN VICE-PRESIDENCIA FINANCAS MTZ">
+                          1100110002 - FIN VICE-PRESIDENCIA FINANCAS MTZ
+                        </option>
+                        <option value="FIN CONTABILIDADE MTZ">
+                          1100110101 - FIN CONTABILIDADE MTZ
+                        </option>
+                      </select>
+                      <div className={styles.select_icon}>
+                        <KeyboardArrowDownIcon className={isClicked === "centro_custo" ? styles.down : ''} />
+                      </div>
                     </div>
                     {errors.centro_custo && (
                       <small className={styles.error_select}>{errors.centro_custo.message}</small>
@@ -273,6 +261,69 @@ function Solicitacao() {
               </div>
 
               <div className={styles.formGrupo2G2}>
+
+                <div className={styles.moeda}>
+                  <label htmlFor="moeda">Moeda*</label>
+                  <div>
+                    <div className={styles.select_wrapper}>
+                      <select
+                        name="moeda"
+                        id="moeda"
+                        {...register("moeda")}
+                        onFocus={() => handleFocus("moeda")}
+                        onBlur={() => handleBlur()}
+                        onInput={()=> handleSelected("moeda")}
+                        className={errors.moeda ? "p-invalid" : ""}
+                      >
+                        <option value="">Selecionar</option>
+                        <option value="BRL">BRL</option>
+                        <option value="ARS">ARS</option>
+                        <option value="USD">USD</option>
+                      </select>
+                      <div className={styles.select_icon}>
+                        <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+                      </div>
+                    </div>
+                    {errors.moeda && (
+                        <small className={styles.error_select}>{errors.moeda.message}</small>
+                    )}
+                  </div>
+                </div>
+
+
+                <div className={styles.despesa}>
+                  <label htmlFor="despesa"> Despesa* </label>
+                  <input
+                    type="number"
+                    id="despesa"
+                    name="despesa"
+                    {...register("despesa")}
+                    className={errors.despesa ? "p-invalid" : ""}
+                  />
+                  {errors.despesa && (
+                    <small className={styles.error}>{errors.despesa.message}</small>
+                  )}
+                </div>
+
+                
+
+                <div className={styles.valorFaturado}>
+                  <label htmlFor="valor_faturado"> Val. Faturado* </label>
+                  <input
+                    type="number"
+                    name="valor_faturado"
+                    id="valor_faturado"
+                    {...register("valor_faturado")}
+                    className={errors.valor_faturado ? "p-invalid" : ""}
+                  />
+                  {errors.valor_faturado && (
+                    <small className={styles.error}>{errors.valor_faturado.message}</small>
+                  )}
+                </div>
+
+              </div>
+              <div className={styles.formGrupo2G3}>
+
                 <div className={styles.ordem}>
                   <label htmlFor="ordem_interna">Ord. Int.</label>
                   <input
@@ -303,34 +354,26 @@ function Solicitacao() {
                   />
                 </div>
 
-                <div className={styles.moeda}>
-                  <label htmlFor="moeda">Moeda*</label>
-                  <div className={styles.select_wrapper}>
-                    <select
-                      name="moeda"
-                      id="moeda"
-                      {...register("moeda")}
-                      onFocus={() => handleFocus("moeda")}
-                      onBlur={() => handleBlur()}
-                      onInput={()=> handleSelected("moeda")}
-                      className={errors.moeda ? "p-invalid" : ""}
-                    >
-                      <option value="">Selecionar</option>
-                      <option value="BRL">BRL</option>
-                      <option value="ARS">ARS</option>
-                      <option value="USD">USD</option>
-                    </select>
-                    <div className={styles.select_icon}>
-                      <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+              </div>
+              <div className={styles.formGrupo2G4}>
+
+                <div className={styles.inputData}>
+                  <label htmlFor="data"> Data</label>
+                  <div className={styles.input_wrapper}>
+                    <input
+                      type="date"
+                      name="data"
+                      id="data"
+                      {...register("data")}
+                      onFocus={(e) => e.target.showPicker?.()}
+                    />
+                    <div className={styles.input_icon}> 
+                      <DateRangeIcon />
                     </div>
-                    {errors.moeda && (
-                      <small className={styles.error_select}>{errors.moeda.message}</small>
-                    )}
                   </div>
                 </div>
-              </div>
-              <div className={styles.formGrupo2G3}>
-              <div className={styles.distancia}>
+
+                <div className={styles.distancia}>
                   <label htmlFor="distancia_km">Dist. / Km</label>
                   <input
                     name="distancia_km"
@@ -344,43 +387,14 @@ function Solicitacao() {
                   <label htmlFor="valor_km">Valor / Km</label>
                   <input
                     name="valor_km"
+                    id="valor_km"
                     type="number"
                     {...register("valor_km")}
                   />
                 </div>
 
-                <div className={styles.valorFaturado}>
-                  <label htmlFor="valor_faturado"> Val. Faturado* </label>
-                  <input
-                    type="number"
-                    name="valor_faturado"
-                    {...register("valor_faturado")}
-                    className={errors.valor_faturado ? "p-invalid" : ""}
-                  />
-                  {errors.valor_faturado && (
-                    <small className={styles.error}>{errors.valor_faturado.message}</small>
-                  )}
-                </div>
-
-                <div className={styles.despesa}>
-                  <label htmlFor="despesa"> Despesa* </label>
-                  <input
-                    type="number"
-                    id="despesa"
-                    name="despesa"
-                    {...register("despesa")}
-                    className={errors.despesa ? "p-invalid" : ""}
-                  />
-                  {errors.despesa && (
-                    <small className={styles.error}>{errors.despesa.message}</small>
-                  )}
-                </div>
-
                 <div className={styles.botoes}>
-                  <button
-                    className={styles.salvar}
-                    type="submit"
-                  >
+                  <button className={styles.salvar} type="submit" onClick={()=> onError(isValid)}>
                     <Save /> Salvar
                   </button>
 
@@ -399,73 +413,73 @@ function Solicitacao() {
                     <Delete />
                   </button>}
                 </div>
+
               </div>
+              
             </div>
           </form>
-          {dadosReembolso.length > 0 ? (
             <div className={styles.container_tabela}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Excluir</th>
-                    <th>Colaborador(a)</th>
-                    <th>Empresa</th>
-                    <th>Nº Prest.</th>
-                    <th>Data</th>
-                    <th>Motivo</th>
-                    <th>Tipo de despesa</th>
-                    <th>Ctr. Custo</th>
-                    <th>Ord. Int.</th>
-                    <th>Div.</th>
-                    <th>PEP</th>
-                    <th>Moeda</th>
-                    <th>Dist. Km</th>
-                    <th>Val. Km</th>
-                    <th>Val. Faturado</th>
-                    <th>Despesa</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dadosReembolso.map((item, index) => (
-                    <tr key={index}>
-                      <td>
-                        <button
-                          onClick={() => {
-                            setGetIndex(index)
-                            setModalExluirDados(true)
-                          }}
-                          className={styles.btnLixeira}
-                        >
-                          <Trash2 size="20px" />
-                        </button>
-                      </td>
-                      <td>{item.colaborador}</td>
-                      <td>{item.empresa}</td>
-                      <td>{item.num_prestacao}</td>
-                      <td>{item.data}</td>
-
-                      <td>
-                          {item.descricao ? <StickyNote style={{marginTop: "2px"}}  size="22px" /> : "Sem Motivo"}
-                      </td>
-
-                      {/* <td>{item.descricao}</td> */}
-                      <td>{item.tipo_reembolso}</td>
-                      <td>{item.centro_custo}</td>
-                      <td>{item.ordem_interna}</td>
-                      <td>{item.divisao}</td>
-                      <td>{item.pep}</td>
-                      <td>{item.moeda}</td>
-                      <td>{item.distancia_km}</td>
-                      <td>{item.valor_km}</td>
-                      <td>{item.valor_faturado}</td>
-                      <td>{item.despesa}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
+              {dadosReembolso.length > 0 ? (
                 <table>
+                  <thead>
+                    <tr>
+                      <th>Excluir</th>
+                      <th>Colaborador(a)</th>
+                      <th>Empresa</th>
+                      <th>Nº Prest.</th>
+                      <th>Data</th>
+                      <th>Motivo</th>
+                      <th>Tipo de despesa</th>
+                      <th>Ctr. Custo</th>
+                      <th>Ord. Int.</th>
+                      <th>Div.</th>
+                      <th>PEP</th>
+                      <th>Moeda</th>
+                      <th>Dist. Km</th>
+                      <th>Val. Km</th>
+                      <th>Val. Faturado</th>
+                      <th>Despesa</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dadosReembolso.map((item, index) => (
+                      <tr key={index}>
+                        <td>
+                          <button
+                            onClick={() => {
+                              setGetIndex(index)
+                              setModalExluirDados(true)
+                            }}
+                            className={styles.btnLixeira}
+                          >
+                            <Trash2 size="20px" />
+                          </button>
+                        </td>
+                        <td>{item.colaborador}</td>
+                        <td>{item.empresa}</td>
+                        <td>{item.num_prestacao}</td>
+                        <td>{item.data}</td>
+
+                        <td>
+                            {item.descricao ? <StickyNote style={{marginTop: "2px"}}  size="22px" /> : "Sem Motivo"}
+                        </td>
+
+                        {/* <td>{item.descricao}</td> */}
+                        <td>{item.tipo_reembolso}</td>
+                        <td>{item.centro_custo}</td>
+                        <td>{item.ordem_interna}</td>
+                        <td>{item.divisao}</td>
+                        <td>{item.pep}</td>
+                        <td>{item.moeda}</td>
+                        <td>{item.distancia_km}</td>
+                        <td>{item.valor_km}</td>
+                        <td>{item.valor_faturado}</td>
+                        <td>{item.despesa}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table> ) : (
+                  <table>
                   <tbody>
                     <tr>
                       <td className={styles.hover_none}  style={{ textAlign: 'center', padding: '2rem'}}>
@@ -474,7 +488,8 @@ function Solicitacao() {
                     </tr>
                   </tbody>
                 </table>
-          )}
+                )}
+            </div>
         </main>
         <footer className={styles.footerSolicitacao}>
           <section>
@@ -486,7 +501,7 @@ function Solicitacao() {
                   readOnly
                   value={dadosReembolso
                     .reduce(
-                      (total, item) => total + Number(item.valorFaturado || 0),
+                      (total, item) => total + Number(item.valor_faturado || 0),
                       0
                     )
                     .toFixed(2)}
