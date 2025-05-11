@@ -57,7 +57,7 @@ function Cadastrar() {
         severity: 'error', 
         detail: error.message,
         life: 5000,
-        style: {backgroundColor: "#FFFFFF", width: "28rem"}
+        style: {backgroundColor: "#FFFFFF", width: "28rem", margin: "0 auto"}
         });
       if(error.message === "Já existe um colaborador com esse e-mail."){
         setError("email",{
@@ -125,8 +125,8 @@ function Cadastrar() {
 
   return (
     <main className={styles.containerCadastro}>
-      <Toast ref={toast} position="top-center"/>
       <section className={styles.contentCadastro}>
+        <Toast ref={toast} position="top-center"/>
         <div className={styles.cabecalhoCadastro}>
           <img src={Logo} alt="Logo da wilson sons" />
           <h1>Bem-vindo ao SISPAR</h1>

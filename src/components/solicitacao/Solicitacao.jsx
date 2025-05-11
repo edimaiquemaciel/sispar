@@ -19,7 +19,7 @@ import OverlayDom from "../modals/Overlay/OverlayDom.jsx";
 import { AuthContext } from "../../authcontext/AuthContext.jsx";
 
 function Solicitacao() {
-  const {user} = useContext(AuthContext)
+  const {user, isSmartPhoneScreen} = useContext(AuthContext)
   const toast = useRef(null);
   const [modaLimparCampos, setModalLimparCampos] = useState(false);
   const [modalExcluirDados, setModalExluirDados] = useState(false);
@@ -49,7 +49,12 @@ function Solicitacao() {
         severity: 'error', 
         detail: "Por favor, preencha os campos obrigatórios",
         life: 5000,
-        style: {width:"29rem"}
+        style: {
+          width: isSmartPhoneScreen ? "22rem" : "29rem", 
+          fontSize: isSmartPhoneScreen ? "11px" : "",
+          margin: isSmartPhoneScreen ? "0 auto" : "",
+          marginTop: isSmartPhoneScreen ? "40px" : ""
+        }
         });
     }
   }
@@ -190,7 +195,74 @@ function Solicitacao() {
             <div className={styles.barraVertical}></div>
 
             <div className={styles.formGrupo2}>
-              <div className={styles.formGrupo2G1}>
+              {isSmartPhoneScreen ? (
+                <div className={styles.formGrupo2G1}>
+                                
+                  <div className={styles.selectDespesas}>
+                    <label htmlFor="tipo_reembolso"> Tipo de Despesa* </label>
+
+                    <div>
+                      <div className={styles.select_wrapper}>
+                        <select
+                          name="tipo_reembolso"
+                          id="tipo_reembolso"
+                          {...register("tipo_reembolso")}
+                          onFocus={() => handleFocus("tipo_reembolso")}
+                          onBlur={() => handleBlur()}
+                          onInput={()=> handleSelected("tipo_reembolso")}
+                          className={errors.tipo_reembolso ? "p-invalid" : ""}
+                        >
+                          <option value="">Selecionar</option>
+                          <option value="alimentacao">Alimentação</option>
+                          <option value="combustivel">Combustível</option>
+                          <option value="conducao">Condução</option>
+                          <option value="estacionamento">Estacionamento</option>
+                          <option value="viagem adm">Viagem admin.</option>
+                          <option value="viagem oper"> Viagem operacional</option>
+                          <option value="eventos">Eventos de representação</option>
+                        </select>
+                        <div className={styles.select_icon}>
+                          <KeyboardArrowDownIcon className={isClicked === "tipo_reembolso" ? styles.down : ''} />
+                        </div>
+                      </div>
+                      {errors.tipo_reembolso && (
+                          <small className={styles.error_select}>{errors.tipo_reembolso.message}</small>
+                        )}
+                    </div>
+                  </div>
+
+                  <div className={styles.moeda}>
+                    <label htmlFor="moeda">Moeda*</label>
+                    <div>
+                      <div className={styles.select_wrapper}>
+                        <select
+                          name="moeda"
+                          id="moeda"
+                          {...register("moeda")}
+                          onFocus={() => handleFocus("moeda")}
+                          onBlur={() => handleBlur()}
+                          onInput={()=> handleSelected("moeda")}
+                          className={errors.moeda ? "p-invalid" : ""}
+                        >
+                          <option value="">Selecionar</option>
+                          <option value="BRL">BRL</option>
+                          <option value="ARS">ARS</option>
+                          <option value="USD">USD</option>
+                        </select>
+                        <div className={styles.select_icon}>
+                          <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+                        </div>
+                      </div>
+                      {errors.moeda && (
+                          <small className={styles.error_select}>{errors.moeda.message}</small>
+                      )}
+                    </div>
+                  </div>
+
+
+                </div>
+              ) : (
+                <div className={styles.formGrupo2G1}>
                                 
                 <div className={styles.selectDespesas}>
                   <label htmlFor="tipo_reembolso"> Tipo de Despesa* </label>
@@ -259,162 +331,325 @@ function Solicitacao() {
                   </div>
                 </div>
               </div>
+              )}
 
-              <div className={styles.formGrupo2G2}>
+              {isSmartPhoneScreen ? (
+                <div className={styles.formGrupo2G2}>
 
-                <div className={styles.moeda}>
-                  <label htmlFor="moeda">Moeda*</label>
-                  <div>
-                    <div className={styles.select_wrapper}>
-                      <select
-                        name="moeda"
-                        id="moeda"
-                        {...register("moeda")}
-                        onFocus={() => handleFocus("moeda")}
-                        onBlur={() => handleBlur()}
-                        onInput={()=> handleSelected("moeda")}
-                        className={errors.moeda ? "p-invalid" : ""}
-                      >
-                        <option value="">Selecionar</option>
-                        <option value="BRL">BRL</option>
-                        <option value="ARS">ARS</option>
-                        <option value="USD">USD</option>
-                      </select>
-                      <div className={styles.select_icon}>
-                        <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+                  <div className={styles.centroDeCusto}>
+                    <label htmlFor="centro_custo">Centro de Custo*</label>
+                    <div>
+                      <div className={styles.select_wrapper}>
+                        <select
+                          name="centro_custo"
+                          id="centro_custo"
+                          {...register("centro_custo")}
+                          onFocus={() => handleFocus("centro_custo")}
+                          onBlur={() => handleBlur()}
+                          onInput={()=> handleSelected("centro_custo")}
+                          className={errors.centro_custo ? "p-invalid" : ""}
+                        >
+                          <option value="">Selecionar</option>
+                          <option value="FIN CONTROLES INTERNOS MTZ">
+                            1100109002 - FIN CONTROLES INTERNOS MTZ
+                          </option>
+                          <option value="FIN VICE-PRESIDENCIA FINANCAS MTZ">
+                            1100110002 - FIN VICE-PRESIDENCIA FINANCAS MTZ
+                          </option>
+                          <option value="FIN CONTABILIDADE MTZ">
+                            1100110101 - FIN CONTABILIDADE MTZ
+                          </option>
+                        </select>
+                        <div className={styles.select_icon}>
+                          <KeyboardArrowDownIcon className={isClicked === "centro_custo" ? styles.down : ''} />
+                        </div>
                       </div>
+                      {errors.centro_custo && (
+                        <small className={styles.error_select}>{errors.centro_custo.message}</small>
+                      )}
                     </div>
-                    {errors.moeda && (
-                        <small className={styles.error_select}>{errors.moeda.message}</small>
+                  </div>
+
+                </div>
+              ) : (
+                <div className={styles.formGrupo2G2}>
+
+                  <div className={styles.moeda}>
+                    <label htmlFor="moeda">Moeda*</label>
+                    <div>
+                      <div className={styles.select_wrapper}>
+                        <select
+                          name="moeda"
+                          id="moeda"
+                          {...register("moeda")}
+                          onFocus={() => handleFocus("moeda")}
+                          onBlur={() => handleBlur()}
+                          onInput={()=> handleSelected("moeda")}
+                          className={errors.moeda ? "p-invalid" : ""}
+                        >
+                          <option value="">Selecionar</option>
+                          <option value="BRL">BRL</option>
+                          <option value="ARS">ARS</option>
+                          <option value="USD">USD</option>
+                        </select>
+                        <div className={styles.select_icon}>
+                          <KeyboardArrowDownIcon className={isClicked === "moeda" ? styles.down : ''} />
+                        </div>
+                      </div>
+                      {errors.moeda && (
+                          <small className={styles.error_select}>{errors.moeda.message}</small>
+                      )}
+                    </div>
+                  </div>
+                  <div className={styles.despesa}>
+                    <label htmlFor="despesa"> Despesa* </label>
+                    <input
+                      type="number"
+                      id="despesa"
+                      name="despesa"
+                      {...register("despesa")}
+                      className={errors.despesa ? "p-invalid" : ""}
+                    />
+                    {errors.despesa && (
+                      <small className={styles.error}>{errors.despesa.message}</small>
+                    )}
+                  </div>             
+
+                  <div className={styles.valorFaturado}>
+                    <label htmlFor="valor_faturado"> Val. Faturado* </label>
+                    <input
+                      type="number"
+                      name="valor_faturado"
+                      id="valor_faturado"
+                      {...register("valor_faturado")}
+                      className={errors.valor_faturado ? "p-invalid" : ""}
+                    />
+                    {errors.valor_faturado && (
+                      <small className={styles.error}>{errors.valor_faturado.message}</small>
                     )}
                   </div>
-                </div>
-
-
-                <div className={styles.despesa}>
-                  <label htmlFor="despesa"> Despesa* </label>
-                  <input
-                    type="number"
-                    id="despesa"
-                    name="despesa"
-                    {...register("despesa")}
-                    className={errors.despesa ? "p-invalid" : ""}
-                  />
-                  {errors.despesa && (
-                    <small className={styles.error}>{errors.despesa.message}</small>
-                  )}
-                </div>
-
-                
-
-                <div className={styles.valorFaturado}>
-                  <label htmlFor="valor_faturado"> Val. Faturado* </label>
-                  <input
-                    type="number"
-                    name="valor_faturado"
-                    id="valor_faturado"
-                    {...register("valor_faturado")}
-                    className={errors.valor_faturado ? "p-invalid" : ""}
-                  />
-                  {errors.valor_faturado && (
-                    <small className={styles.error}>{errors.valor_faturado.message}</small>
-                  )}
-                </div>
 
               </div>
-              <div className={styles.formGrupo2G3}>
+              )}
+              {isSmartPhoneScreen ? (
+                <div className={styles.formGrupo2G3}>
 
-                <div className={styles.ordem}>
-                  <label htmlFor="ordem_interna">Ord. Int.</label>
-                  <input
-                    name="ordem_interna"
-                    id="ordem_interna"
-                    type="number"
-                    {...register("ordem_interna")}
-                  />
-                </div>
-
-                <div className={styles.divisoes}>
-                  <label htmlFor="divisao">Div.</label>
-                  <input
-                    type="text"
-                    id="divisao"
-                    name="divisao"
-                    {...register("divisao")}
-                  />
-                </div>
-
-                <div className={styles.pep}>
-                  <label htmlFor="pep">PEP</label>
-                  <input
-                    name="pep"
-                    id="pep"
-                    type="number"
-                    {...register("pep")}
-                  />
-                </div>
-
-              </div>
-              <div className={styles.formGrupo2G4}>
-
-                <div className={styles.inputData}>
-                  <label htmlFor="data"> Data</label>
-                  <div className={styles.input_wrapper}>
+                  <div className={styles.despesa}>
+                    <label htmlFor="despesa"> Despesa* </label>
                     <input
-                      type="date"
-                      name="data"
-                      id="data"
-                      {...register("data")}
-                      onFocus={(e) => e.target.showPicker?.()}
+                      type="number"
+                      id="despesa"
+                      name="despesa"
+                      {...register("despesa")}
+                      className={errors.despesa ? "p-invalid" : ""}
                     />
-                    <div className={styles.input_icon}> 
-                      <DateRangeIcon />
+                    {errors.despesa && (
+                      <small className={styles.error}>{errors.despesa.message}</small>
+                    )}
+                  </div>             
+
+                  <div className={styles.valorFaturado}>
+                    <label htmlFor="valor_faturado"> Val. Faturado* </label>
+                    <input
+                      type="number"
+                      name="valor_faturado"
+                      id="valor_faturado"
+                      {...register("valor_faturado")}
+                      className={errors.valor_faturado ? "p-invalid" : ""}
+                    />
+                    {errors.valor_faturado && (
+                      <small className={styles.error}>{errors.valor_faturado.message}</small>
+                    )}
+                  </div>
+
+
+                  <div className={styles.ordem}>
+                    <label htmlFor="ordem_interna">Ord. Int.</label>
+                    <input
+                      name="ordem_interna"
+                      id="ordem_interna"
+                      type="number"
+                      {...register("ordem_interna")}
+                    />
+                  </div>
+
+                  <div className={styles.divisoes}>
+                    <label htmlFor="divisao">Div.</label>
+                    <input
+                      type="text"
+                      id="divisao"
+                      name="divisao"
+                      {...register("divisao")}
+                    />
+                  </div>
+
+                  <div className={styles.pep}>
+                    <label htmlFor="pep">PEP</label>
+                    <input
+                      name="pep"
+                      id="pep"
+                      type="number"
+                      {...register("pep")}
+                    />
+                  </div>
+                  <div className={styles.inputData}>
+                    <label htmlFor="data"> Data</label>
+                    <div className={styles.input_wrapper}>
+                      <input
+                        type="date"
+                        name="data"
+                        id="data"
+                        {...register("data")}
+                        onFocus={(e) => e.target.showPicker?.()}
+                      />
+                      <div className={styles.input_icon}> 
+                        <DateRangeIcon />
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className={styles.distancia}>
-                  <label htmlFor="distancia_km">Dist. / Km</label>
-                  <input
-                    name="distancia_km"
-                    id="distancia_km"
-                    type="text"
-                    {...register("distancia_km")}
-                  />
-                </div>
-
-                <div className={styles.valorKm}>
-                  <label htmlFor="valor_km">Valor / Km</label>
-                  <input
-                    name="valor_km"
-                    id="valor_km"
-                    type="number"
-                    {...register("valor_km")}
-                  />
-                </div>
-
-                <div className={styles.botoes}>
-                  <button className={styles.salvar} type="submit" onClick={()=> onError(isValid)}>
-                    <Save /> Salvar
-                  </button>
-
-                  {campoVazio ? <button
-                    className={styles.deletar}
-                    type="button"
-                    onClick={() => setModalLimparCampos(true)}
-                  >
-                    <Delete />
-                  </button> : <button
-                    className={styles.deletar}
-                    type="button"
-                    onClick={() => setModalLimparCampos(true)}
-                    disabled
-                  >
-                    <Delete />
-                  </button>}
-                </div>
-
               </div>
+              
+                
+              ) : (
+                <div className={styles.formGrupo2G3}>
+                  <div className={styles.ordem}>
+                    <label htmlFor="ordem_interna">Ord. Int.</label>
+                    <input
+                      name="ordem_interna"
+                      id="ordem_interna"
+                      type="number"
+                      {...register("ordem_interna")}
+                    />
+                  </div>
+
+                  <div className={styles.divisoes}>
+                    <label htmlFor="divisao">Div.</label>
+                    <input
+                      type="text"
+                      id="divisao"
+                      name="divisao"
+                      {...register("divisao")}
+                    />
+                  </div>
+
+                  <div className={styles.pep}>
+                    <label htmlFor="pep">PEP</label>
+                    <input
+                      name="pep"
+                      id="pep"
+                      type="number"
+                      {...register("pep")}
+                    />
+                  </div>
+                </div>
+              )}
+              {isSmartPhoneScreen ? (
+                <div className={styles.formGrupo2G4}>
+
+                  <div className={styles.distancia}>
+                    <label htmlFor="distancia_km">Dist. / Km</label>
+                    <input
+                      name="distancia_km"
+                      id="distancia_km"
+                      type="text"
+                      {...register("distancia_km")}
+                    />
+                  </div>
+
+                  <div className={styles.valorKm}>
+                    <label htmlFor="valor_km">Valor / Km</label>
+                    <input
+                      name="valor_km"
+                      id="valor_km"
+                      type="number"
+                      {...register("valor_km")}
+                    />
+                  </div>
+
+                  <div className={styles.botoes}>
+                    <button className={styles.salvar} type="submit" onClick={()=> onError(isValid)}>
+                      <Save /> Salvar
+                    </button>
+
+                    {campoVazio ? <button
+                      className={styles.deletar}
+                      type="button"
+                      onClick={() => setModalLimparCampos(true)}
+                    >
+                      <Delete />
+                    </button> : <button
+                      className={styles.deletar}
+                      type="button"
+                      onClick={() => setModalLimparCampos(true)}
+                      disabled
+                    >
+                      <Delete />
+                    </button>}
+                  </div>
+
+                </div>
+              ) : (
+                <div className={styles.formGrupo2G4}>
+
+                  <div className={styles.inputData}>
+                    <label htmlFor="data"> Data</label>
+                    <div className={styles.input_wrapper}>
+                      <input
+                        type="date"
+                        name="data"
+                        id="data"
+                        {...register("data")}
+                        onFocus={(e) => e.target.showPicker?.()}
+                      />
+                      <div className={styles.input_icon}> 
+                        <DateRangeIcon />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.distancia}>
+                    <label htmlFor="distancia_km">Dist. / Km</label>
+                    <input
+                      name="distancia_km"
+                      id="distancia_km"
+                      type="text"
+                      {...register("distancia_km")}
+                    />
+                  </div>
+
+                  <div className={styles.valorKm}>
+                    <label htmlFor="valor_km">Valor / Km</label>
+                    <input
+                      name="valor_km"
+                      id="valor_km"
+                      type="number"
+                      {...register("valor_km")}
+                    />
+                  </div>
+
+                  <div className={styles.botoes}>
+                    <button className={styles.salvar} type="submit" onClick={()=> onError(isValid)}>
+                      <Save /> Salvar
+                    </button>
+
+                    {campoVazio ? <button
+                      className={styles.deletar}
+                      type="button"
+                      onClick={() => setModalLimparCampos(true)}
+                    >
+                      <Delete />
+                    </button> : <button
+                      className={styles.deletar}
+                      type="button"
+                      onClick={() => setModalLimparCampos(true)}
+                      disabled
+                    >
+                      <Delete />
+                    </button>}
+                  </div>
+
+                </div>
+              )}
               
             </div>
           </form>

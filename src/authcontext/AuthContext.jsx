@@ -10,7 +10,7 @@ const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const isDesktopScreen = useMediaQuery('(min-width:1440px)');
     const isTabletScreen = useMediaQuery('(max-width:768px)');
-    const isSmartPhoneScreen = useMediaQuery('(max-width:412px)');
+    const isSmartPhoneScreen = useMediaQuery('(max-width:414px)');
 
     useEffect(() => {
         const savedUser = localStorage.getItem("user");

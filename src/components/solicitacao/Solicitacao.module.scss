@@ -59,6 +59,10 @@
     z-index: 1;
   
   }
+
+  @media (max-width: 414px) {
+    width: 99%;
+  }
 }
 
 .headerSolicitacao {
@@ -102,12 +106,15 @@
   display: flex;
   justify-content: space-between;
   min-height: 250px;
-  max-height: 700px;
   margin-top: 5px;
   @media (max-width: 768px) {
     flex-direction: column;
     margin-top: 65px;
-    gap: 10px;
+    gap: 100px;
+  }
+  @media (max-width: 414px) {
+    width: 99%;
+    gap: 100px;
   }
 }
 
@@ -116,13 +123,15 @@
   height: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 10px;
   margin-left: 5px;
   @media (max-width: 768px) {
     width: 98%;
-    height: 340px;
+    height: 250px;
+  }
+  @media (max-width: 414px) {
+    height: 280px;
   }
 }
 
@@ -149,7 +158,7 @@
 .inputMotivo {
   width: 100%;
   textarea {
-    height: 12.5vh;
+    height: 13.3vh;
   }
 }
 
@@ -170,12 +179,47 @@
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 10px;
   @media (max-width: 768px) {
     margin-left: 5px;
     width: 98%;
     height: 350px;
   }
+
+  .formGrupo2G3 {
+  @media (max-width: 414px) {
+   flex-direction: row;
+   flex-wrap: wrap;
+   gap: 0;
+   
+  .ordem,
+  .divisoes,
+  .pep,
+  .valorFaturado,
+  .despesa,
+  .inputData {
+    width: 120px;
+    flex: none;
+  }
+  .inputData {
+    input {
+      font-size: 8.8px;
+      padding: 0 0 0 3px;
+    }
+  }
+ }
+}
+.formGrupo2G1 {
+  @media (max-width: 414px) {
+    flex-direction: row;
+  }
+}
+.formGrupo2G4{
+  @media (max-width: 414px) {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+  }
+}
 }
 
 .formGrupo2G1,
@@ -185,10 +229,13 @@
   width: 99%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 20px;
   @media (max-width: 768px) {
     width: 100%;
+  }
+  @media (max-width: 414px) {
+   flex-direction: column;
   }
 }
 
@@ -198,14 +245,20 @@
   }
 }
 
+
 .inputData {
   flex: 1;
 }
 
 .selectDespesas {
   width: 35%;
+  height: 70.59px;
   select {
     padding: 0 10px;
+  }
+  @media (max-width: 414px) {
+    width: 60%;
+    height: 60px;
   }
 }
 
@@ -216,20 +269,28 @@
   }
 }
 
-.ordem,
 .divisoes,
-.pep,
-.distancia {
+.pep {
   flex: 1;
 }
 
-.valorKm,
-.valorFaturado {
+.distancia,
+.valorKm {
   flex: 1;
+  @media (max-width: 414px) {
+    flex: none;
+    width: 28%;
+  }
 }
 
-.despesa {
+.valorFaturado,
+.despesa,
+.ordem {
   flex: 1;
+  @media (max-width: 414px) {
+    margin-bottom: 10px;
+  }
+
 }
 
 
@@ -239,6 +300,29 @@
     padding-left: 5px;
   }
 }
+
+.ordem,
+.divisoes,
+.pep,
+.inputData,
+.centroDeCusto,
+.valorFaturado,
+.despesa,
+.moeda,
+.inputNome,
+.inputEmpresa,
+.inputPrestacao,
+.inputMotivo
+ {
+  height: 70.59px;
+  @media (max-width: 414px) {
+   width: 100%;
+   height: 60px;
+  }
+  
+ }
+
+
 
 .botoes {
   width: 20%;
@@ -268,6 +352,13 @@
     &:hover {
       background-color: #5890c9;
     }
+    @media (max-width: 414px) {
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  
   }
 
   .deletar {
@@ -283,6 +374,9 @@
     &:hover {
       background-color: #a60b2f;
     }
+  }
+  @media (max-width: 414px) {
+    width: 45%;
   }
 }
 
@@ -315,6 +409,9 @@ table {
   margin-left: 5px;
   @media (max-width: 768px) {
     width: 98%;
+  }
+  @media (max-width: 414px) {
+    width: 97%;
   }
 
 }
@@ -374,6 +471,22 @@ td {
     align-items: center;
     width: 68%;
     height: 15vh;
+    @media (max-width: 414px) {
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      gap: 30px;
+      height: 100%;
+      width: 99%;
+      .total {
+        display: flex;
+        gap: 10px;
+        margin-left: 2px;
+        .inputFooter {
+          margin: 0;
+        }
+      }
+   }
   }
 
   .boxButtonFooter {
@@ -431,6 +544,22 @@ td {
         background-color: #f1073e;
       }
     }
+
+    @media (max-width: 414px) {
+      width: 100%;
+      height: 68px;
+      .buttonAnalise,
+      .buttonCancelar {
+        font-size: 12px
+      }
+
+    }
+  }
+  @media (max-width: 414px) {
+    flex-direction: column;
+    justify-content: center;
+    height: 193px;
+    width: 98%;
   }
 }
 
@@ -588,7 +717,6 @@ td {
 .error {
   color: red;
   font-size: 8px;
-  margin-top: 4px;
 }
 
 .error_select {
