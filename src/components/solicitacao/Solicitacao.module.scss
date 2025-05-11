@@ -214,6 +214,7 @@
   }
 }
 .formGrupo2G4{
+  align-items: flex-start;
   @media (max-width: 414px) {
     flex-direction: row;
     align-items: flex-end;
@@ -328,12 +329,14 @@
   width: 20%;
   display: flex;
   justify-content: space-between;
-  height: 4vh;
+  height: 70.58px;
+  align-items: center;
 
   .salvar {
     background-color: #001a3d;
     color: #ffffff;
     width: 60%;
+    height: 4vh;
     font-size: 0.7rem;
     display: flex;
     align-items: center;
@@ -363,6 +366,7 @@
 
   .deletar {
     width: 35%;
+    height: 4vh;
     background-color: #00BEDD;
     display: flex;
     align-items: center;
@@ -377,6 +381,7 @@
   }
   @media (max-width: 414px) {
     width: 45%;
+    align-items: flex-end;
   }
 }
 
@@ -585,7 +590,7 @@ td {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 100;
   svg {
     transition: transform 0.2s ease-in-out;
   }
