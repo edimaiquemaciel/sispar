@@ -123,6 +123,7 @@ function Cadastrar() {
   }
 
 
+
   return (
     <main className={styles.containerCadastro}>
       <section className={styles.contentCadastro}>
@@ -263,6 +264,7 @@ function Cadastrar() {
                   weakLabel="Senha fraca" 
                   mediumLabel="Senha média" 
                   strongLabel="Senha forte"
+                  feedback={errors?.confirmacao_senha ? false : true}
                   pt={{
                     panel: {
                       style: {
