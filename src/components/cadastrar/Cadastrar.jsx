@@ -260,11 +260,7 @@ function Cadastrar() {
                   toggleMask
                   style={{ display: "block" }}
                   placeholder="Confirme sua senha"
-                  promptLabel="Confirme sua senha" 
-                  weakLabel="Senha fraca" 
-                  mediumLabel="Senha média" 
-                  strongLabel="Senha forte"
-                  feedback={errors?.confirmacao_senha ? false : true}
+                  feedback={false}
                   pt={{
                     panel: {
                       style: {
