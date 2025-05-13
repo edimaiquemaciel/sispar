@@ -1,10 +1,12 @@
-# SISPAR 
+# Desafio final SISPAR - Vai Na Web & Wilson Sons
 ## Sistema de Emissão de Boletos e Parcelamento
-
-![SISPAR Logo](https://via.placeholder.com/150x50?text=SISPAR)
-
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)]()
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Material UI](https://img.shields.io/badge/Material_UI-latest-0081CB?logo=material-ui&logoColor=white)](https://mui.com/)
+[![PrimeReact](https://img.shields.io/badge/PrimeReact-latest-6366F1)](https://primereact.org/)
+[![React Router](https://img.shields.io/badge/React_Router-6.x-CA4245?logo=react-router&logoColor=white)](https://reactrouter.com/)
+[![SCSS](https://img.shields.io/badge/SCSS-1.0-CC6699?logo=sass&logoColor=white)](https://sass-lang.com/)
+[![Axios](https://img.shields.io/badge/Axios-latest-5A29E4?logo=axios&logoColor=white)](https://axios-http.com/)
+[![Zod](https://img.shields.io/badge/Zod-latest-3068B7)](https://github.com/colinhacks/zod)
 
 ## 📋 Visão Geral
 
@@ -19,15 +21,14 @@ Simplificar e automatizar processos financeiros empresariais, proporcionando uma
 | Funcionalidade | Descrição |
 |----------------|-----------|
 | 🔐 **Autenticação Segura** | Sistema completo de registro e login com validação de dados e proteção por JWT |
-| 💰 **Gerenciamento de Reembolsos** | Interface intuitiva para criação de solicitações de reembolosos |
+| 💰 **Gerenciamento de Reembolsos** | Interface intuitiva para criação de solicitações de reembolsos |
 | 📱 **Design Responsivo** | Experiência otimizada em qualquer dispositivo - desktop, tablet ou smartphone |
-| 🔔 **Notificações em Tempo Real** | Alertas instantâneos sobre mudanças de status nas solicitações |
-| 📄 **Exportação de Relatórios** | Geração de relatórios em diversos formatos (PDF, CSV, Excel) |
 
 ## 🛠️ Tecnologias
 
 ### Frontend
 - **React.js (18.x)** - Biblioteca para construção de interfaces de usuário
+- **Material UI** - Biblioteca de componentes React para implementação do Material Design
 - **React Router DOM (6.x)** - Sistema de roteamento SPA
 - **React Hook Form** - Gerenciamento eficiente de formulários
 - **PrimeReact** - Componentes UI ricos e personalizáveis
@@ -89,7 +90,7 @@ sispar/
 
 1. **Clone o repositório**
    ```bash
-   git clone https://github.com/seu-usuario/sispar.git
+   git clone https://github.com/edimaiquemaciel/sispar.git
    cd sispar
    ```
 
@@ -134,6 +135,13 @@ Agradecemos seu interesse em contribuir com o SISPAR! Siga estas etapas para par
    git push origin feature/nome-da-feature
    ```
 5. **Abra um Pull Request**
+
+### Convenções de Código
+
+- Siga as [Convenções de Commit do Conventional Commits](https://www.conventionalcommits.org/)
+- Mantenha o código limpo seguindo os princípios do Clean Code
+- Adicione testes para novas funcionalidades
+
 
 ### Equipe
 
