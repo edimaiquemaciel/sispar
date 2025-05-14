@@ -21,6 +21,9 @@ function Cadastrar() {
   const navigate = useNavigate();
   const {register, handleSubmit, getValues, setValue, setError, clearErrors, setFocus, reset, control, formState: {isSubmitting, errors}} = useForm({ 
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+    salario: null,
+  }
     
   });
   const registerWithMask = useHookFormMask(register);
