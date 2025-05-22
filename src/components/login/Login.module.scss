@@ -114,6 +114,21 @@
   }
 }
 
+@media (max-width: 1360px) {
+  .mainLogin {
+    .formWapper {
+      padding: min(5rem, 8%);
+      .boxLogo {
+        width: 99%;
+      }
+
+      form {
+        width: 99%;
+      }
+    }
+  }
+}
+
 
 @media (max-width: 768px) {
 
